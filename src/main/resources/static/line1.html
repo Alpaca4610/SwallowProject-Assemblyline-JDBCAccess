@@ -310,6 +310,10 @@
     </style>
     
     <script>
+        $(function(){
+            var windowWidth = $(document).width(); // 800
+            var windowHeight = $(document).height();
+        });
         $(document).ready(function() {
             $(function() {
                 $("#checkboxDiv").find(":checkbox").each(function() {
@@ -368,9 +372,7 @@
             Chart4.resize();
             Colchart.resize();
         });
-    </script>
-    
-    <script type="text/javascript">
+
         window.onload = function() {
             var checkbox1 = this.document.getElementById('cboxA');
             var checkbox2 = this.document.getElementById('cboxB');
@@ -380,159 +382,94 @@
             var checkbox6 = this.document.getElementById('cboxF');
 
             checkbox1.onclick = function() {
-                    $('#chart2').hide();
-                    $('#chart3').hide();
-                    $('#chart4').hide();
-                    $('#warningLog1').hide();
-                    $('#warningLog2').hide();        
-                    $('#box2').hide();
-                    $('#box3').hide();
-                    $('#box4').hide();
-                    $('#box5').hide();
-                    $('#box6').hide();
-                var c1 = $('#chart1');
-                if (checkbox1.checked) {         
-                    c1.animate({             
-                        height: '730px'
-                    }, 888,function(){
-                        Chart1.resize();
-                    });
-                   
+                var c1 = $('#chart1');     
+                var c11 = [$('#chart2'),$('#chart3'),$('#chart4'), $('#warningLog1'),$('#warningLog1'),$('#box1'),$('#box2'),$('#ChangeInformation'),$('#efficiency'),$('#ColChart')];             
+                if (checkbox1.checked) {
+                    for (var i=0; i<c11.length; i++) 
+                    { 
+                        c11[i].hide(); 
+                    }    
+                    c1.css("height", function() {return $(document).height() * 0.8;});
+                    c1.css("width",function() {return $(document).width();});
+                    Chart1.resize();
                 } else {                  
-                    c1.animate({
-                        width: '612px',
-                        height: '364px'
-                    }, 888,function(){
+                    //  c1.animate({
+                    //      width: 'auto',
+                    //      height: '364px'
+                    //  }, 888,function(){
+                        c1.css("height", '364px');
+                        c1.css("width",'');                 
                         Chart1.resize();
-                        $('#chart2').fadeIn();
-                        $('#chart3').fadeIn();
-                        $('#chart4').fadeIn();
-                        $('#warningLog1').fadeIn();
-                        $('#warningLog2').fadeIn();                   
-                        $('#box2').fadeIn();
-                        $('#box3').fadeIn();
-                        $('#box4').fadeIn();
-                        $('#box5').fadeIn();
-                        $('#box6').fadeIn();                  
-                    }); 
+                        for (var i=0; i<c11.length; i++) 
+                    { 
+                        c11[i].fadeIn(); 
+                    }                  
+                    //  }); 
                 }
             };
+
             checkbox2.onclick = function() {
                 var c2 = $('#chart2');
-                if (checkbox2.checked) {         
-                    c2.animate({
-                        width: '1850px',
-                        height: '730px'
-                    }, 888,function(){
+                var c12 = [$('#chart1'),$('#chart3'),$('#chart4'), $('#warningLog1'),$('#warningLog1'),$('#box1'),$('#box2'),$('#ChangeInformation'),$('#efficiency'),$('#ColChart')];             
+                if (checkbox2.checked) {
+                    for (var i=0; i<c12.length; i++) 
+                    { 
+                        c12[i].hide(); 
+                    }    
+                    c2.css("height", function() {return $(document).height() * 0.8;});
+                    c2.css("width",function() {return $(document).width();});
+                    Chart2.resize();
+                } else {                  
+                        c2.css("height", '364px');
+                        c2.css("width",'');                 
                         Chart2.resize();
-                    });
-                    $('#chart1').hide();
-                    $('#chart3').hide();
-                    $('#chart4').hide();
-                    $('#warningLog1').hide();
-                    $('#warningLog2').hide();        
-                    $('#box1').hide();
-                    $('#box3').hide();
-                    $('#box4').hide();
-                    $('#box5').hide();
-                    $('#box6').hide();
-                } else {
-                    c2.animate({
-                        width: '612px',
-                        height: '364px'
-                    }, 888,function(){
-                        Chart2.resize();
-                        $('#chart1').fadeIn();
-                    $('#chart3').fadeIn();
-                    $('#chart4').fadeIn();
-                    $('#warningLog1').fadeIn();
-                    $('#warningLog2').fadeIn();                   
-                    $('#box1').fadeIn();
-                    $('#box3').fadeIn();
-                    $('#box4').fadeIn();
-                    $('#box5').fadeIn();
-                    $('#box6').fadeIn();
-                    });
-                   
+                        for (var i=0; i<c12.length; i++) 
+                    { 
+                        c12[i].fadeIn(); 
+                    }                  
                 }
             };
             checkbox3.onclick = function() {
                 var c3 = $('#chart3');
-                if (checkbox3.checked) {         
-                    c3.animate({
-                        width: '1850px',
-                        height: '730px'
-                    }, 888,function(){
+                var c13 = [$('#chart1'),$('#chart2'),$('#chart4'), $('#warningLog1'),$('#warningLog1'),$('#box1'),$('#box2'),$('#ChangeInformation'),$('#efficiency'),$('#ColChart')];             
+                if (checkbox3.checked) {
+                    for (var i=0; i<c13.length; i++) 
+                    { 
+                        c13[i].hide(); 
+                    }    
+                    c3.css("height", function() {return $(document).height() * 0.8;});
+                    c3.css("width",function() {return $(document).width();});
+                    Chart3.resize();
+                } else {                  
+                        c3.css("height", '364px');
+                        c3.css("width",'');                 
                         Chart3.resize();
-                    });
-                    $('#chart1').hide();
-                    $('#chart2').hide();
-                    $('#chart4').hide();
-                    $('#warningLog1').hide();
-                    $('#warningLog2').hide();        
-                    $('#box1').hide();
-                    $('#box2').hide();
-                    $('#box4').hide();
-                    $('#box5').hide();
-                    $('#box6').hide();
-                } else {
-                    c3.animate({
-                        width: '612px',
-                        height: '364px'
-                    }, 888,function(){
-                        Chart3.resize();
-                        $('#chart1').fadeIn();
-                    $('#chart2').fadeIn();
-                    $('#chart4').fadeIn();
-                    $('#warningLog1').fadeIn();
-                    $('#warningLog2').fadeIn();                   
-                    $('#box1').fadeIn();
-                    $('#box2').fadeIn();
-                    $('#box4').fadeIn();
-                    $('#box5').fadeIn();
-                    $('#box6').fadeIn();
-                    });                 
+                        for (var i=0; i<c13.length; i++) 
+                    { 
+                        c13[i].fadeIn(); 
+                    }                  
                 }
             };
             checkbox4.onclick = function() {
                 var c4 = $('#chart4');
-                if (checkbox4.checked) {         
-                    c4.animate({
-                        width: '1850px',
-                        height: '730px'
-                    }, 888,function(){
+                var c14 = [$('#chart1'),$('#chart2'),$('#chart3'), $('#warningLog1'),$('#warningLog1'),$('#box1'),$('#box2'),$('#ChangeInformation'),$('#efficiency'),$('#ColChart')];             
+                if (checkbox4.checked) {
+                    for (var i=0; i<c14.length; i++) 
+                    { 
+                        c14[i].hide(); 
+                    }    
+                    c4.css("height", function() {return $(document).height() * 0.8;});
+                    c4.css("width",function() {return $(document).width();});
+                    Chart4.resize();
+                } else {                  
+                        c4.css("height", '364px');
+                        c4.css("width",'');                 
                         Chart4.resize();
-                    });
-                    $('#chart1').hide();
-                    $('#chart2').hide();
-                    $('#chart3').hide();
-                    $('#warningLog1').hide();
-                    $('#warningLog2').hide();        
-                    $('#box1').hide();
-                    $('#box2').hide();
-                    $('#box3').hide();
-                    $('#box5').hide();
-                    $('#box6').hide();
-                } else {
-                    c4.animate({
-                        width: '612px',
-                        height: '364px'
-                    }, 888,function(){
-                        Chart4.resize();
-                        $('#chart1').fadeIn();
-                    $('#chart2').fadeIn();
-                    $('#chart3').fadeIn();
-                    $('#warningLog1').fadeIn();
-                    $('#warningLog2').fadeIn();                   
-                    $('#box1').fadeIn();
-                    $('#box2').fadeIn();
-                    $('#box3').fadeIn();
-                    $('#box5').fadeIn();
-                    $('#box6').fadeIn();
-                    });
-                    
+                        for (var i=0; i<c14.length; i++) 
+                    { 
+                        c14[i].fadeIn(); 
+                    }                  
                 }
-                
             };
             checkbox5.onclick = function() {
                 if (checkbox5.checked) {
@@ -618,7 +555,7 @@
                     </div>
 
 
-                <div id="efficiency" style="overflow-y:auto;" class="col-md-4 col-sm-4">
+                <div id="box1" style="overflow-y:auto;" class="col-md-4 col-sm-4">
                 <div class="panel panel-danger" style="margin-top: 20px;">
                     <div class="panel-heading">
                     <h3 class="panel-title">严重危险警报</h3>
@@ -627,7 +564,7 @@
                 </div>
                 </div>
 
-                    <div id="efficiency" style="overflow-y:auto;" class="col-md-4 col-sm-4">
+                    <div id="box2" style="overflow-y:auto;" class="col-md-4 col-sm-4">
                         <div class="panel panel-warning" style="margin-top: 20px;">
                             <div class="panel-heading">
                             <h3 class="panel-title">潜在危险警报</h3>
@@ -755,7 +692,6 @@
                 HigherCount = 0;
                 LowerCount++;
             }
-
 
             if (HigherCount >= 5) {
                 let position = document.getElementById('warningLog2');
