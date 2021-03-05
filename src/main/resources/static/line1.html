@@ -575,18 +575,13 @@
 
                 <form id="ChangeInformation" class="col-md-4 col-sm-4" style="text-align:center;">
                     <p >
-                        <div class="btn-group" > 
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            监控指标 <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                            <li><a href="#">长度</a></li>
-                            <li><a href="#">宽度</a></li>
-                            <li><a href="#">高度</a></li>
-                            <li><a href="#">重量</a></li>
-                            </ul>
-                        </div>
-                        </p>           
+                        <h3>监控指标</h3>
+                        <select class="form-control" id="watch_type" style="width: min-content; margin: 0 auto;">
+                            <option>长度</option>
+                            <option>宽度</option>
+                            <option>高度</option>
+                            <option>重量</option>
+                        </select>    
                     <p>
                         <div class="input-group">
                             <span class="input-group-addon" id="basic-addon3">高位阈值</span>
@@ -634,7 +629,11 @@
                 </div>
                 </div>
 
-                <div id="ColChart" class="col-md-4 col-sm-4">
+                <div class="col-md-4 col-sm-4">
+                    <div id="ColChart" style="height: 80%;"></div>
+                    <div class="alert alert-danger" role="alert">
+                        当前瓶颈工位为：<a class="alert-link" id="bottlenID"></a>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -648,9 +647,11 @@
             width = [],
             height = [],
             weight = [];
+            bottleneck = 0;
 
         function getData() {
             var url = "http://localhost:8080/sample3";
+            var station = "http://localhost:8080/l1neck";
             $.getJSON(url, function(json_data) {
                 id.push(json_data[0]['id']);
                 length.push(json_data[0]['length']);
@@ -658,69 +659,277 @@
                 height.push(json_data[0]['height']);
                 weight.push(json_data[0]['weight']);
             });
+            $.getJSON(station, function(json_data) {
+                bottleneck = Number(json_data[0]);
+            });
+            $("#bottlenID").text(bottleneck);
         }
 
         getData();
 
-        var HigherCount = 0;
-        var LowerCount = 0;
+        var DataType = 0; //0: length, 1: width, 2: height, 3: weight
+
+        var HigherCountHeight = 0;
+        var LowerCountHeight = 0;
         var HighestHeight = 17;
         var AverageHeight = 16.5;
         var LowestHeight = 16;
+         
+        var HigherCountLength = 0;
+        var LowerCountLength = 0;
+        var HighestLength = 17;
+        var AverageLength = 16.5;
+        var LowestLength = 16;
+
+        var HigherCountWidth = 0;
+        var LowerCountWidth = 0;
+        var HighestWidth = 17;
+        var AverageWidth = 16.5;
+        var LowestWidth = 16;
+
+        var HigherCountWeight = 0;
+        var LowerCountWeight = 0;
+        var HighestWeight = 17;
+        var AverageWeight = 16.5;
+        var LowestWeight = 16;
 
         function judge() {
-            if (height[height.length - 1] > HighestHeight) {
-                HigherCount++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现严重危险：height值：" + height[height.length - 1] + " 大于最大阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (height[height.length - 1] < LowestHeight) {
-                LowerCount++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现严重危险：height值：" + height[height.length - 1] + " 低于最小阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (height[height.length - 1] >= AverageHeight && height[height.length - 1] <= HighestHeight) {
-                HigherCount++;
-                LowerCount = 0;
-            } else if (height[height.length - 1] < AverageHeight && height[height.length - 1] >= LowestHeight) {
-                HigherCount = 0;
-                LowerCount++;
-            }
+            //监测长度时执行
+            if(DataType == 0) {
+                if (length[length.length - 1] > HighestLength) {
+                    HigherCountLength++;
+                    let position = document.getElementById('warningLog1');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现严重危险：length值：" + length[length.length - 1] + " 大于最大阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (length[length.length - 1] < LowestLength) {
+                    LowerCountLength++;
+                    let position = document.getElementById('warningLog1');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现严重危险：length值：" + length[length.length - 1] + " 低于最小阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (length[length.length - 1] >= AverageLength && length[length.length - 1] <= HighestLength) {
+                    HigherCountLength++;
+                    LowerCountLength = 0;
+                } else if (length[length.length - 1] < AverageLength && length[length.length - 1] >= LowestLength) {
+                    HigherCountLength = 0;
+                    LowerCountLength++;
+                }
 
-            if (HigherCount >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现潜在危险：height值连续" + HigherCount + "次高于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (LowerCount >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现潜在危险：height值连续" + LowerCount + "次低于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
+                if (HigherCountLength >= 5) {
+                    let position = document.getElementById('warningLog2');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现潜在危险：length值连续" + HigherCountLength + "次高于中位阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (LowerCountLength >= 5) {
+                    let position = document.getElementById('warningLog2');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现潜在危险：length值连续" + LowerCountLength + "次低于中位阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                }
             }
+            //监测宽度时执行
+            if(DataType == 1) {
+                if (width[width.length - 1] > HighestWidth) {
+                    HigherCountWidth++;
+                    let position = document.getElementById('warningLog1');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现严重危险：width值：" + width[width.length - 1] + " 大于最大阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (width[width.length - 1] < LowestWidth) {
+                    LowerCountWidth++;
+                    let position = document.getElementById('warningLog1');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现严重危险：width值：" + width[width.length - 1] + " 低于最小阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (width[width.length - 1] >= AverageWidth && width[width.length - 1] <= HighestWidth) {
+                    HigherCountWidth++;
+                    LowerCountWidth = 0;
+                } else if (width[width.length - 1] < AverageWidth && width[width.length - 1] >= LowestWidth) {
+                    HigherCountWidth = 0;
+                    LowerCountWidth++;
+                }
 
+                if (HigherCountWidth >= 5) {
+                    let position = document.getElementById('warningLog2');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现潜在危险：width值连续" + HigherCountWidth + "次高于中位阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (LowerCountWidth >= 5) {
+                    let position = document.getElementById('warningLog2');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现潜在危险：width值连续" + LowerCountWidth + "次低于中位阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                }
+            }
+            //监测高度时执行
+            if(DataType == 2) {
+                if (height[height.length - 1] > HighestHeight) {
+                    HigherCountHeight++;
+                    let position = document.getElementById('warningLog1');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现严重危险：height值：" + height[height.length - 1] + " 大于最大阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (height[height.length - 1] < LowestHeight) {
+                    LowerCountHeight++;
+                    let position = document.getElementById('warningLog1');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现严重危险：height值：" + height[height.length - 1] + " 低于最小阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (height[height.length - 1] >= AverageHeight && height[height.length - 1] <= HighestHeight) {
+                    HigherCountHeight++;
+                    LowerCountHeight = 0;
+                } else if (height[height.length - 1] < AverageHeight && height[height.length - 1] >= LowestHeight) {
+                    HigherCountHeight = 0;
+                    LowerCountHeight++;
+                }
+
+                if (HigherCountHeight >= 5) {
+                    let position = document.getElementById('warningLog2');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现潜在危险：height值连续" + HigherCountHeight + "次高于中位阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (LowerCountHeight >= 5) {
+                    let position = document.getElementById('warningLog2');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现潜在危险：height值连续" + LowerCountHeight + "次低于中位阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                }
+            }
+            //监测重量时执行
+            if(DataType == 3) {
+                if (weight[weight.length - 1] > HighestWeight) {
+                    HigherCountWeight++;
+                    let position = document.getElementById('warningLog1');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现严重危险：weight值：" + weight[weight.length - 1] + " 大于最大阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (weight[weight.length - 1] < LowestWeight) {
+                    LowerCountWeight++;
+                    let position = document.getElementById('warningLog1');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现严重危险：weight值：" + weight[weight.length - 1] + " 低于最小阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (weight[weight.length - 1] >= AverageWeight && weight[weight.length - 1] <= HighestWeight) {
+                    HigherCountHeight++;
+                    LowerCountWeight = 0;
+                } else if (weight[weight.length - 1] < AverageWeight && weight[weight.length - 1] >= LowestWeight) {
+                    HigherCountWeight = 0;
+                    LowerCountWeight++;
+                }
+
+                if (HigherCountWeight >= 5) {
+                    let position = document.getElementById('warningLog2');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现潜在危险：weight值连续" + HigherCountWeight + "次高于中位阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                } else if (LowerCountWeight >= 5) {
+                    let position = document.getElementById('warningLog2');
+                    let temp = document.createElement('p');
+                    var now = new Date();
+                    let warningText = now + "产线出现潜在危险：weight值连续" + LowerCountWeight + "次低于中位阈值";
+                    temp.innerText = warningText;
+                    position.appendChild(temp);
+                }
+            }
         }
 
+        $("#watch_type").change(function () {
+            var res = $(this).children("option:selected").val();
+            switch(res){
+                case "长度":
+                    DataType = 0;
+                    break;
+                case "宽度":
+                    DataType = 1;
+                    break;
+                case "高度":
+                    DataType = 2;
+                    break;
+                case "重量":
+                    DataType = 3;
+                    break;
+            }
+        });
+
         function ChangeInformation() {
-            LowestHeight = Number(document.getElementById('low').value);
-            HighestHeight = Number(document.getElementById('high').value);
-            AverageHeight = Number(document.getElementById('average').value);
+            switch(DataType){
+                case 0:
+                    LowestLength = Number(document.getElementById('low').value);
+                    HighestLength = Number(document.getElementById('high').value);
+                    AverageLength = Number(document.getElementById('average').value);
+                    break;
+                case 1:
+                    LowestWidth = Number(document.getElementById('low').value);
+                    HighestWidth = Number(document.getElementById('high').value);
+                    AverageWidth = Number(document.getElementById('average').value);
+                    break;
+                case 2:
+                    LowestHeight = Number(document.getElementById('low').value);
+                    HighestHeight = Number(document.getElementById('high').value);
+                    AverageHeight = Number(document.getElementById('average').value);
+                    break;
+                case 3:
+                    LowestWeight = Number(document.getElementById('low').value);
+                    HighestWeight = Number(document.getElementById('high').value);
+                    AverageWeight = Number(document.getElementById('average').value);
+                    break;
+            }
         }
 
         function Reset() {
-            HighestHeight = 17;
-            AverageHeight = 16.5;
-            LowestHeight = 16;
+            switch(DataType){
+                case 0:
+                    HighestLength = 17;
+                    AverageLength = 16.5;
+                    LowestLength = 16;
+                    break;
+                case 1:
+                    HighestWidth = 17;
+                    AverageWidth = 16.5;
+                    LowestWidth = 16;
+                    break;
+                case 2:
+                    HighestHeight = 17;
+                    AverageHeight = 16.5;
+                    LowestHeight = 16;
+                    break;
+                case 3:
+                    HighestWeight = 17;
+                    AverageWeight = 16.5;
+                    LowestWeight = 16;
+                    break;
+            }
             document.getElementById('low').value = "";
             document.getElementById('high').value = "";
             document.getElementById('average').value = "";
@@ -739,10 +948,12 @@
                 text: '瓶颈工位监测'
             },
             xAxis: {
+            name: '工位',
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
             },
             yAxis: {
+            name: '耗时',
             type: 'value'
             },
             series: [{
@@ -778,8 +989,6 @@
                 data: id
             },
             yAxis: {
-                min: 0,
-                max: 30,
                 name: 'value',
                 type: 'value',
                 boundaryGap: [0, '50%'],
@@ -815,8 +1024,6 @@
                 data: id
             },
             yAxis: {
-                min: 0,
-                max: 30,
                 name: 'value',
                 type: 'value',
                 boundaryGap: [0, '50%'],
@@ -852,8 +1059,6 @@
                 data: id
             },
             yAxis: {
-                min: 0,
-                max: 30,
                 name: 'value',
                 type: 'value',
                 boundaryGap: [0, '50%'],
@@ -889,8 +1094,6 @@
                 data: id
             },
             yAxis: {
-                min: 0,
-                max: 50,
                 name: 'value',
                 type: 'value',
                 boundaryGap: [0, '50%'],
