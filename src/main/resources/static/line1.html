@@ -10,280 +10,9 @@
     <script src="resource/js/bootstrap.min.js"></script>
     <script src="resource/js/echarts.min.js"></script>
     <script src="resource/js/wonderland.js"></script>
-    <title>生产线1</title>
+    <title>生产线</title>
 
     <style type=text/css>
-        .hamburger {
-            background: transparent;
-            border: none;
-            display: block;
-            height: 32px;
-            margin-left: 15px;
-            position: relative;
-            top: 20px;
-            width: 32px;
-            z-index: 999;
-        }
-
-        .hamburger:hover {
-            outline: none;
-        }
-
-        .hamburger:focus {
-            outline: none;
-        }
-
-        .hamburger:active {
-            outline: none;
-        }
-
-        .hamburger.is-closed:before {
-            -webkit-transform: translate3d(0, 0, 0);
-            -webkit-transition: all 0.35s ease-in-out;
-            color: #ffffff;
-            content: '';
-            display: block;
-            font-size: 14px;
-            line-height: 32px;
-            opacity: 0;
-            text-align: center;
-            width: 100px;
-        }
-
-        .hamburger.is-closed:hover before {
-            -webkit-transform: translate3d(-100px, 0, 0);
-            -webkit-transition: all 0.35s ease-in-out;
-            display: block;
-            opacity: 1;
-        }
-
-        .hamburger.is-closed:hover .hamb-top {
-            -webkit-transition: all 0.35s ease-in-out;
-            top: 0;
-        }
-
-        .hamburger.is-closed:hover .hamb-bottom {
-            -webkit-transition: all 0.35s ease-in-out;
-            bottom: 0;
-        }
-
-        .hamburger.is-closed .hamb-top {
-            -webkit-transition: all 0.35s ease-in-out;
-            background-color: rgba(0, 0, 0, 0.7);
-            top: 5px;
-        }
-
-        .hamburger.is-closed .hamb-middle {
-            background-color: rgba(0, 0, 0, 0.7);
-            margin-top: -2px;
-            top: 50%;
-        }
-
-        .hamburger.is-closed .hamb-bottom {
-            -webkit-transition: all 0.35s ease-in-out;
-            background-color: rgba(0, 0, 0, 0.7);
-            bottom: 5px;
-        }
-
-        .hamburger.is-closed .hamb-top,
-        .hamburger.is-closed .hamb-middle,
-        .hamburger.is-closed .hamb-bottom,
-        .hamburger.is-open .hamb-top,
-        .hamburger.is-open .hamb-middle,
-        .hamburger.is-open .hamb-bottom {
-            height: 4px;
-            left: 0;
-            position: absolute;
-            width: 100%;
-        }
-
-        .hamburger.is-open .hamb-top {
-            -webkit-transform: rotate(45deg);
-            -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.73, 1, 0.28, 0.08);
-            background-color: #000000;
-            margin-top: -2px;
-            top: 50%;
-        }
-
-        .hamburger.is-open .hamb-middle {
-            background-color: #000000;
-            display: none;
-        }
-
-        .hamburger.is-open .hamb-bottom {
-            -webkit-transform: rotate(-45deg);
-            -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.73, 1, 0.28, 0.08);
-            background-color: #000000;
-            margin-top: -2px;
-            top: 50%;
-        }
-
-        .hamburger.is-open:before {
-            -webkit-transform: translate3d(0, 0, 0);
-            -webkit-transition: all 0.35s ease-in-out;
-            color: #000000;
-            content: '';
-            display: block;
-            font-size: 14px;
-            line-height: 32px;
-            opacity: 0;
-            text-align: center;
-            width: 100px;
-        }
-
-        .hamburger.is-open:hover before {
-            -webkit-transform: translate3d(-100px, 0, 0);
-            -webkit-transition: all 0.35s ease-in-out;
-            display: block;
-            opacity: 1;
-        }
-
-        #wrapper {
-            -moz-transition: all 0.5s ease;
-            -o-transition: all 0.5s ease;
-            -webkit-transition: all 0.5s ease;
-            padding-left: 0;
-            transition: all 0.5s ease;
-        }
-
-        #wrapper.toggled {
-            padding-left: 220px;
-        }
-
-        #wrapper.toggled #sidebar-wrapper {
-            width: 220px;
-        }
-
-        #wrapper.toggled #page-content-wrapper {
-            margin-right: -220px;
-            position: absolute;
-        }
-
-        #sidebar-wrapper {
-            -moz-transition: all 0.5s ease;
-            -o-transition: all 0.5s ease;
-            -webkit-transition: all 0.5s ease;
-            background: #1a1a1a;
-            height: 100%;
-            left: 220px;
-            margin-left: -220px;
-            overflow-x: hidden;
-            overflow-y: auto;
-            transition: all 0.5s ease;
-            width: 0;
-            z-index: 1000;
-        }
-
-        #sidebar-wrapper::-webkit-scrollbar {
-            display: none;
-        }
-
-        #page-content-wrapper {
-            padding-top: 10px;
-            width: 100%;
-        }
-
-        .sidebar-nav {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            top: 0;
-            width: 220px;
-        }
-
-        .sidebar-nav li {
-            display: inline-block;
-            line-height: 20px;
-            position: relative;
-            width: 100%;
-        }
-
-        .sidebar-nav li:before {
-            background-color: #1c1c1c;
-            content: '';
-            height: 100%;
-            left: 0;
-            position: absolute;
-            top: 0;
-            -webkit-transition: width 0.2s ease-in;
-            transition: width 0.2s ease-in;
-            width: 3px;
-            z-index: -1;
-        }
-
-        .sidebar-nav li:first-child a {
-            background-color: #1a1a1a;
-            color: #ffffff;
-        }
-
-        .sidebar-nav li:nth-child(2):before {
-            background-color: #627dd7;
-        }
-
-        .sidebar-nav li:nth-child(3):before {
-            background-color: #627dd7;
-        }
-
-        .sidebar-nav li:nth-child(4):before {
-            background-color: #627dd7;
-        }
-
-        .sidebar-nav li:nth-child(5):before {
-            background-color: #627dd7;
-        }
-
-        .sidebar-nav li:nth-child(6):before {
-            background-color: #627dd7;
-        }
-
-        .sidebar-nav li:hover:before {
-            -webkit-transition: width 0.2s ease-in;
-            transition: width 0.2s ease-in;
-            width: 100%;
-        }
-
-        .sidebar-nav li a {
-            color: #dddddd;
-            display: block;
-            padding: 10px 15px 10px 30px;
-            text-decoration: none;
-        }
-
-        .sidebar-nav li.open:hover before {
-            -webkit-transition: width 0.2s ease-in;
-            transition: width 0.2s ease-in;
-            width: 100%;
-        }
-
-        .sidebar-nav .dropdown-menu {
-            background-color: #222222;
-            border-radius: 0;
-            border: none;
-            box-shadow: none;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            width: 100%;
-        }
-
-        .sidebar-nav li a:hover,
-        .sidebar-nav li a:active,
-        .sidebar-nav li a:focus,
-        .sidebar-nav li.open a:hover,
-        .sidebar-nav li.open a:active,
-        .sidebar-nav li.open a:focus {
-            background-color: transparent;
-            color: #ffffff;
-            text-decoration: none;
-        }
-
-        .sidebar-nav>.sidebar-brand {
-            font-size: 20px;
-            height: 65px;
-            line-height: 44px;
-        }
-
         @media screen and (max-width: 1200px) and (min-width: 0px) {
             div.row .col-sm-12 {
                 width: 100%;
@@ -292,7 +21,7 @@
                 float: left;
             }
 
-            div.row .col-sm-4 {
+            div.row .col-sm-6 {
                 width: 100%;
                 height: 364px;
                 border: solid 2px black;
@@ -311,12 +40,12 @@
         @media screen and (min-width: 1200px) {
             div.row .col-md-12 {
                 height: 64px;
-                border: solid 2px black;
+                /* border: solid 2px black; */
             }
 
-            div.row .col-md-4 {
+            div.row .col-md-6 {
                 height: 364px;
-                border: solid 2px black;
+                /* border: solid 2px black; */
                 float: left;
             }
         }
@@ -325,11 +54,11 @@
     <script>
         $(function () {
             getData();
-            Chart1.showLoading();
+            // Chart1.showLoading();
             Chart2.showLoading();
             Chart3.showLoading();
             Chart4.showLoading();
-            Colchart.showLoading();
+            // Colchart.showLoading();
             var cboxflag = [0, 0, 0, 0];
             var checkbox1 = $('#cboxA');
             var checkbox2 = $('#cboxB');
@@ -496,133 +225,151 @@
 
 <body>
     <div id="wrapper">
-        <div class="overlay"></div>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="sidebar-wrapper">
-            <ul class="nav sidebar-nav">
-                <li class="sidebar-brand"> <a href="#">SPC</a> </li>
-                <li> <a href="index.html">Home</a> </li>
-                <li> <a href="line1.html">生产线1</a> </li>
-                <li> <a href="line2.html">生产线2</a> </li>
-                <li> <a href="line3.html">生产线3</a> </li>
-                <li> <a href="ProcessPublish.html">生产计划下发</a> </li>
-            </ul>
-        </nav>
-        <!-- Sidebar -->
+        <div class="container-fluid">
+            <h1 align="center" class="page-header">生产线-工艺数据统计</h1>
+            <div class="tabbable">
+                <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+                    <li class="active"><a href="#tab1" data-toggle="tab">拧紧参数监控</a>
+                    </li>
+                    <li><a href="#tab2" data-toggle="tab">压装参数监控</a>
+                    </li>
+                    <li><a href="#tab3" data-toggle="tab">瓶颈工位监控</a>
+                    </li>
+                    <li><a href="#tab4" data-toggle="tab">报警页面</a>
+                    </li>
+                    <li><a href="#tab5" data-toggle="tab">阈值修改</a>
+                    </li>
+                    <li><a href="#tab6" data-toggle="tab">指标监控</a>
+                    </li>
+                </ul>
 
-        <!-- /#sidebar-wrapper -->
-
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <button type="button" class="hamburger is-closed animated fadeInLeft" data-toggle="offcanvas">
-                <span class="hamb-top"></span>
-                <span class="hamb-middle"></span>
-                <span class="hamb-bottom"></span>
-            </button>
-            <div class="container-fluid">
-                <h1 align="center">生产线1-工艺数据统计</h1>
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        
-                            <button type="button" class="btn btn-default" id="cboxA"
-                                style="margin-left: 14.5%;margin-top: 1%;">长度监控图</button>
-                            <button type="button" class="btn btn-success" id="cboxB"
-                                style="margin-left: 14.5%;margin-top: 1%;">高度监控图</button>
-                            <button type="button" class="btn btn-info" id="cboxC"
-                                style="margin-left: 14.5%;margin-top: 1%;">宽度监控图</button>
-                            <button type="button" class="btn btn-warning" id="cboxD"
-                                style="margin-left: 14.5%;margin-top: 1%;">重量监控图</button>
-                        
-                    </div>
-
-                    <div id="chart1" class="col-md-4 col-sm-4"></div>
-                    <div id="chart2" class="col-md-4 col-sm-4"></div>
-                    <div id="chart3" class="col-md-4 col-sm-4"></div>
-                    <div id="chart4" class="col-md-4 col-sm-4"></div>
-
-                    <div id="box1" style="overflow-y:auto;" class="col-md-4 col-sm-4">
-                        <div class="panel panel-danger" style="margin-top: 20px;">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">严重危险警报</h3>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <button type="button" class="btn btn-success" id="cboxA"
+                                    style="margin-left: 14.5%;margin-top: 1%;">工位一扭矩</button>
+                                <button type="button" class="btn btn-success" id="cboxB"
+                                    style="margin-left: 14.5%;margin-top: 1%;">工位一角度</button>
+                                <button type="button" class="btn btn-warning" id="cboxC"
+                                    style="margin-left: 14.5%;margin-top: 1%;">工位二扭矩</button>
+                                <button type="button" class="btn btn-warning" id="cboxD"
+                                    style="margin-left: 14.5%;margin-top: 1%;">工位二角度</button>
                             </div>
-                            <div class="panel-body" id="warningLog1"></div>
+
+                            <div id="chart1" class="col-md-6 col-sm-6"></div>
+                            <div id="chart2" class="col-md-6 col-sm-6"></div>
+                            <div id="chart3" class="col-md-6 col-sm-6"></div>
+                            <div id="chart4" class="col-md-6 col-sm-6"></div>
+                            <!-- <div id="chart9" class="col-md-6 col-sm-6"></div> -->
                         </div>
                     </div>
 
-                    <div id="box2" style="overflow-y:auto;" class="col-md-4 col-sm-4">
-                        <div class="panel panel-warning" style="margin-top: 20px;">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">潜在危险警报</h3>
+                    <div class="tab-pane active" id="tab2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div id="chart5" class="col-md-6"></div>
+                                <div id="chart6" class="col-md-6 col-sm-6"></div>
+                                <div id="chart7" class="col-md-6 col-sm-6"></div>
+                                <div id="chart8" class="col-md-6 col-sm-6"></div>
                             </div>
-                            <div class="panel-body" id="warningLog2"></div>
                         </div>
                     </div>
 
-                    <form id="ChangeInformation" class="col-md-4 col-sm-4" style="text-align:center;">
-                        <p>
-                        <h3>监控指标</h3>
-                        <select class="form-control" id="watch_type" style="width: min-content; margin: 0 auto;">
-                            <option>长度</option>
-                            <option>宽度</option>
-                            <option>高度</option>
-                            <option>重量</option>
-                        </select>
-                        <p>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon3">高位阈值</span>
-                            <input type="text" class="form-control" id="high" aria-describedby="basic-addon3">
-                        </div>
-                        </p>
-                        <p>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon3">中位阈值</span>
-                            <input type="text" class="form-control" id="average" aria-describedby="basic-addon3">
-                        </div>
-                        </p>
-                        <p>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon3">低位阈值</span>
-                            <input type="text" class="form-control" id="low" aria-describedby="basic-addon3">
-                        </div>
-                        </p>
-                        <p style="text-align:center;">
-                            <button type="button" class="btn btn-success" onclick="ChangeInformation()">提交</button>
-                            <button type="button" onclick="Reset()" class="btn btn-warning">重置</button>
-                        </p>
-                    </form>
-
-                    <div id="efficiency" style="overflow-y:auto;" class="col-md-4 col-sm-4">
-                        <div class="panel panel-primary" style="text-align:center;margin-top: 50px;">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">指标分析</h3>
+                    <div class="tab-pane active" id="tab3">
+                        <div class="col-md-12 col-sm-12" id="neckbox">
+                            <div id="ColChart" style="height: 300px;"></div>
+                            <div class="alert alert-danger" role="alert">
+                                当前瓶颈工位为：<a class="alert-link" id="bottlenID"></a>
                             </div>
-                            <p style="text-align: center;margin-top: 30px;">
-                                <button class="btn btn-primary" type="button">
-                                    运行效率 <span class="badge" id="eMessage"></span>
-                                </button>
-                            </p>
-                            <p style="text-align: center;">
-                                <button class="btn btn-primary" type="button">
-                                    质量分析 <span class="badge" id="eMessage"></span>
-                                </button>
-                            </p>
-                            <p style="text-align: center;">
-                                <button class="btn btn-primary" type="button">
-                                    KPI <span class="badge" id="eMessage"></span>
-                                </button>
-                            </p>
                         </div>
                     </div>
 
-                    <div class="col-md-4 col-sm-4" id="neckbox">
-                        <div id="ColChart" style="height: 80%;"></div>
-                        <div class="alert alert-danger" role="alert">
-                            当前瓶颈工位为：<a class="alert-link" id="bottlenID"></a>
+                    <div class="tab-pane" id="tab4">
+                        <div id="box1" style="overflow-y:auto;" class="col-md-6 col-sm-6">
+                            <div class="panel panel-danger" style="margin-top: 20px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">严重危险警报</h3>
+                                </div>
+                                <div class="panel-body" id="warningLog1"></div>
+                            </div>
+                        </div>
+                        <div id="box2" style="overflow-y:auto;" class="col-md-6 col-sm-6">
+                            <div class="panel panel-warning" style="margin-top: 20px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">潜在危险警报</h3>
+                                </div>
+                                <div class="panel-body" id="warningLog2"></div>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="tab-pane" id="tab5">
+                        <form id="ChangeInformation" class="col-md-12 col-sm-12"
+                            style="text-align:center; height: 100%;">
+                            <p>
+                            <h3>监控指标</h3>
+                            <select class="form-control" id="watch_type" style="width: min-content; margin: 0 auto;">
+                                <option>长度</option>
+                                <option>宽度</option>
+                                <option>高度</option>
+                                <option>重量</option>
+                            </select>
+                            <p>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon3">高位阈值</span>
+                                <input type="text" class="form-control" id="high" aria-describedby="basic-addon3">
+                            </div>
+                            </p>
+                            <p>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon3">中位阈值</span>
+                                <input type="text" class="form-control" id="average" aria-describedby="basic-addon3">
+                            </div>
+                            </p>
+                            <p>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon3">低位阈值</span>
+                                <input type="text" class="form-control" id="low" aria-describedby="basic-addon3">
+                            </div>
+                            </p>
+                            <p style="text-align:center;">
+                                <button type="button" class="btn btn-success" onclick="ChangeInformation()">提交</button>
+                                <button type="button" onclick="Reset()" class="btn btn-warning">重置</button>
+                            </p>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane" id="tab6">
+                        <div id="efficiency" style="height: 100%;" class="col-md-12 col-sm-12">
+                            <div class="panel panel-primary" style="text-align:center;margin-top: 50px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">指标分析</h3>
+                                </div>
+                                <p style="text-align: center;margin-top: 30px;">
+                                    <button class="btn btn-primary" type="button">
+                                        运行效率 <span class="badge" id="eMessage"></span>
+                                    </button>
+                                </p>
+                                <p style="text-align: center;">
+                                    <button class="btn btn-primary" type="button">
+                                        质量分析 <span class="badge" id="eMessage"></span>
+                                    </button>
+                                </p>
+                                <p style="text-align: center;">
+                                    <button class="btn btn-primary" type="button">
+                                        KPI <span class="badge" id="eMessage"></span>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
+    <!-- </div> -->
 
 
     <script>
@@ -648,7 +395,6 @@
                 width.push(json_data[0]['width']);
                 height.push(json_data[0]['height']);
                 weight.push(json_data[0]['weight']);
-
 
                 if (id.length > 7) {
                     id.shift();
@@ -951,7 +697,7 @@
             xAxis: {
                 name: '工位',
                 type: 'category',
-                data: ['工位1', '工位2', '工位3']
+                data: ['伺服压机\nOP010SA', '液压站\nOP020SA', '人工预处理工位\nOP030SA', '自动拧紧工位\nOP040A', '人工预处理工位\nOP060M', '自动拧紧工位\nOP070A', '下料位\nOP80A']
             },
             yAxis: {
                 name: '耗时',
@@ -969,13 +715,13 @@
 
         var Chart1option = {
             title: {
-                text: '长度监测'
+                text: '工位一扭矩'
             },
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data: ['长度']
+                data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
             },
             grid: {
                 left: '3%',
@@ -983,23 +729,82 @@
                 bottom: '3%',
                 containLabel: true
             },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
             xAxis: {
-                name: 'id',
                 type: 'category',
                 boundaryGap: false,
-                data: id
+                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
             },
             yAxis: {
-                name: 'value',
-                type: 'value',
-                boundaryGap: [0, '50%'],
+                type: 'value'
             },
-            series: [{
-                name: '长度',
-                type: 'line',
-                data: length,
-                stack: '值'
-            }]
+            series: [
+                {
+                    name: '1',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [120, 132, 101, 134, 90, 230, 210]
+                },
+                {
+                    name: '2',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [220, 182, 191, 234, 290, 330, 310]
+                },
+                {
+                    name: '3',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [150, 232, 201, 154, 190, 330, 410]
+                },
+                {
+                    name: '4',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 301, 334, 390, 330, 320]
+                },
+                {
+                    name: '5',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [820, 932, 901, 934, 1290, 1330, 1320]
+                },
+                {
+                    name: '6',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 301, 34, 390, 30, 320]
+                },
+                {
+                    name: '7',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [30, 332, 301, 334, 390, 330, 320]
+                },
+                {
+                    name: '8',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 301, 34, 390, 330, 30]
+                },
+                {
+                    name: '9',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 301, 334, 390, 330, 430]
+                },
+                {
+                    name: '10',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 31, 334, 30, 330, 20]
+                }
+
+            ]
         }
 
         var Chart2option = {
@@ -1108,6 +913,187 @@
             }]
         }
 
+        var Chart5option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+        var Chart6option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+        var Chart7option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+        var Chart8option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+        var Chart9option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+
         setInterval(function () {
             getData();
             if (id[id.length - 1] == id[id.length - 2])
@@ -1162,16 +1148,66 @@
                 }]
             });
 
-            Colchart.setOption({
+            Chart5.setOption({
+                xAxis: {
+                    data: id
+                },
                 series: [{
-                    data: stastionData,
-                    type: 'bar'
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart6.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart7.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart8.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart9.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
                 }]
             });
         }, 1000);
-
-        var Colchart = echarts.init(document.getElementById('ColChart'));
-        Colchart.setOption(ColChartoption);
 
         var Chart1 = echarts.init(document.getElementById('chart1'), 'wonderland');
         Chart1.setOption(Chart1option);
@@ -1184,6 +1220,25 @@
 
         var Chart4 = echarts.init(document.getElementById('chart4'), 'wonderland');
         Chart4.setOption(Chart4option);
+
+        var Chart5 = echarts.init(document.getElementById('chart5'), 'wonderland');
+        Chart5.setOption(Chart5option);
+
+        var Chart6 = echarts.init(document.getElementById('chart6'), 'wonderland');
+        Chart6.setOption(Chart6option);
+
+        var Chart7 = echarts.init(document.getElementById('chart7'), 'wonderland');
+        Chart7.setOption(Chart7option);
+
+        var Chart8 = echarts.init(document.getElementById('chart8'), 'wonderland');
+        Chart8.setOption(Chart8option);
+
+        // var Chart9 = echarts.init(document.getElementById('chart9'), 'wonderland');
+        // Chart9.setOption(Chart9option);
+
+        var Colchart = echarts.init(document.getElementById('ColChart'));
+        Colchart.setOption(ColChartoption);
+
     </script>
 </body>
 
