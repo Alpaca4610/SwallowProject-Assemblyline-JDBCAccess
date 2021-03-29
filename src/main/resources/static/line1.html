@@ -17,7 +17,7 @@
             width: 50px;
             height: 50px;
             border-radius: 25%;
-            background-color: lightgreen;
+            background-color: gray;
             border-width: 1px;
             border-style: solid;
             margin: 0 auto
@@ -27,7 +27,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background-color: lightgreen;
+            background-color: gray;
             border-width: 1px;
             border-style: solid;
             margin: 0 auto
@@ -77,18 +77,16 @@
     </style>
 
     <script>
-        $(function () {
-            var pressFlag = 0;
-            var tightFlag = 0;
-            var pSum = 0;
-            var tab1Sum = 0;
-            var tab2Sum = 0;
-            var tab3Sum = 0;
-            var tab4Sum = 0;
-            var tab5Sum = 0;
-            var FinishedPSum = 0;
-            var PassedPSum = 0;
+        var pressFlag = 0;
+        var tightFlag = 0;
+        var pSum = 0;
+        var tab1Sum = 0;
+        var tab2Sum = 0;
+        var tab3Sum = 0;
+        var tab4Sum = 0;
+        var tab5Sum = 0;
 
+        $(function () {
             getData();
             Chart1.showLoading();
             Chart2.showLoading();
@@ -257,6 +255,8 @@
                     </li>
                     <li><a href="#tab6" data-toggle="tab">指标监控</a>
                     </li>
+                    <li><a href="#tab7" data-toggle="tab">产品信息</a>
+                    </li>
                 </ul>
 
                 <div class="tab-content">
@@ -359,14 +359,6 @@
                                 <div class="panel-body" id="warningLog2"></div>
                             </div>
                         </div>
-                        <div id="productWatch" style="overflow-y:auto;" class="col-md-12 col-sm-12">
-                            <div class="panel panel-warning" style="margin-top: 20px;">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">产品监控</h3>
-                                </div>
-                                <div class="panel-body" id="warningLog2"></div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="tab-pane" id="tab5">
@@ -395,31 +387,43 @@
                                 <h3>工位状态</h3>
                                 <div class="row" style="display: flex; justify-content:center;">
                                     <div class="col-md-1">
-                                        <div class="light-status-1"></div>
+                                        <div class="light-status-1" id="status-1-1"></div>
+                                        <h4 style="text-align: center;">OP005A</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-2"></div>
                                         <h4 style="text-align: center;">OP101SA</h4>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-1"></div>
+                                        <div class="light-status-1" id="status-1-3"></div>
                                         <h4 style="text-align: center;">OP020SA</h4>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-1"></div>
+                                        <div class="light-status-1" id="status-1-4"></div>
                                         <h4 style="text-align: center;">OP030SA</h4>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-1"></div>
+                                        <div class="light-status-1" id="status-1-5"></div>
                                         <h4 style="text-align: center;">OP040A</h4>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-1"></div>
+                                        <div class="light-status-1" id="status-1-6"></div>
+                                        <h4 style="text-align: center;">OP050A</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-7"></div>
                                         <h4 style="text-align: center;">OP060M</h4>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-1"></div>
+                                        <div class="light-status-1" id="status-1-8"></div>
                                         <h4 style="text-align: center;">OP070A</h4>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-1"></div>
+                                        <div class="light-status-1" id="status-1-9"></div>
+                                        <h4 style="text-align: center;">OP075M</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-10"></div>
                                         <h4 style="text-align: center;">OP08A</h4>
                                     </div>
                                 </div>
@@ -432,119 +436,119 @@
                                 <h4>通信</h4>
                                 <div class="row" style="display: flex; justify-content:center;">
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-0"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-1"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-2"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-3"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-4"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-5"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-6"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-7"></div>
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top: 10px; display: flex; justify-content:center;">
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-8"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-9"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-10"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-11"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-12"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-13"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-14"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-2-15"></div>
                                     </div>
                                 </div>
                                 <hr>
                                 <h4>上电</h4>
                                 <div class="row" style="display: flex; justify-content:center;">
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-0"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-1"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-2"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-3"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-4"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-5"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-6"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-7"></div>
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top: 10px; display: flex; justify-content:center;">
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-8"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-9"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-10"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-11"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-12"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-13"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-14"></div>
                                     </div>
                                     <div class="col-md-1">
-                                        <div class="light-status-2"></div>
+                                        <div class="light-status-2" id="status-3-15"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="tab-pane" id="tab6">
-                        <div id="efficiency" style="height: 100%;" class="col-md-12 col-sm-12">
+                    <div class="tab-pane active" id="tab6">
+                        <div style="height: 100%;" class="col-md-12 col-sm-12">
                             <div class="panel panel-primary" style="text-align:center;margin-top: 50px;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">指标分析</h3>
+                                    <h3 class="panel-title">统计结果展示</h3>
                                 </div>
                                 <p style="text-align: center;margin-top: 30px;">
                                     <button class="btn btn-primary" type="button">
@@ -558,9 +562,30 @@
                                 </p>
                                 <p style="text-align: center;">
                                     <button class="btn btn-primary" type="button">
-                                        KPI <span class="badge" id="eMessage"></span>
+                                        产品合格率 <span class="badge" id="passRate">0</span>
                                     </button>
                                 </p>
+                                <div id="timeChart" style="height: 300px;"></div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="tab-pane active" id="tab7">
+                        <div style="overflow-y:auto;" class="col-md-12 col-sm-12" style="height: 250px;">
+                            <div class="panel panel-warning" style="margin-top: 20px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">产品监控</h3>
+                                </div>
+                                <div class="panel-body" id="productWatch"></div>
+                            </div>
+                        </div>
+                        <div style="overflow-y:auto;" class="col-md-12 col-sm-12" style="height: 250px;">
+                            <div class="panel panel-primary" style="margin-top: 20px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">产品KPI</h3>
+                                </div>
+                                <div class="panel-body" id="KPI"></div>
                             </div>
                         </div>
                     </div>
@@ -579,78 +604,90 @@
             weight = [],
             bottleneck = 0,
             stationData = [0, 0, 0, 0, 0, 0, 0],
-            id = [];
+            id = [],
+            productID = [-1],
+            test = 0;
 
-        var error = false;
+        var error_1 = Array(11).fill(false);
+        var ok_1 = Array(11).fill(false);
+        var error_2 = Array(16).fill(false);
+        var ok_2 = Array(16).fill(false);
+        var error_3 = Array(16).fill(false);
+        var ok_3 = Array(16).fill(false);
         var running = false;
         var Stop = false;
         var warning = false;
 
-        function productJudge() {
-            var productString = "";
-            var productUrl = "http://localhost:8080/PASS_OK_NG";
-            var now =  new Date();
-            FinishedPSum++;
-            $.getJSON(productUrl, function (json_data) {
-                var all_status = json_data[0]['allok'];
-                var productID = json_data[0]['id'];
-            })
-            if (!all_status) {
-                var stationStatus = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                var stationBypass = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                $.getJSON(productUrl, function (json_data) {
-                    stationStatus[2] = json_data[0]['line1_station2_product_OK'];
-                    stationBypass[2] = json_data[0]['line1_station2_bypass'];
-                    stationStatus[3] = json_data[0]['line1_station3_product_OK'];
-                    stationBypass[3] = json_data[0]['line1_station3_bypass'];
-                    stationStatus[4] = json_data[0]['line1_station4_product_OK'];
-                    stationBypass[4] = json_data[0]['line1_station4_bypass'];
-                    stationStatus[5] = json_data[0]['line1_station5_product_OK'];
-                    stationBypass[5] = json_data[0]['line1_station5_bypass'];
-                    stationStatus[7] = json_data[0]['line1_station7_product_OK'];
-                    stationBypass[7] = json_data[0]['line1_station7_bypass'];
-                    stationStatus[8] = json_data[0]['line1_station8_product_OK'];
-                    stationBypass[8] = json_data[0]['line1_station8_bypass'];
-                    stationStatus[10] = json_data[0]['line1_station10_product_OK'];
-                    stationBypass[10] = json_data[0]['line1_station10_bypass'];
-                })
-                productString = "now + 产品" + productID + "质量不合格，问题工位为：";
-                if (stationBypass[2] && !stationStatus[2]) {
-                    productID += "2号工位 ";
+        function stateWatch() {
+            var stateUrl = "http://localhost:8080/states"
+            $.getJSON(stateUrl, function (json_data) {
+                if (json_data[0]["PLC_station_running"] == "1") {
+                    running = true;
                 }
-                if (stationBypass[3] && !stationStatus[3]) {
-                    productID += "3号工位 ";
+                if (json_data[0]["PLC_station_stop"] == "1") {
+                    Stop = true;
                 }
-                if (stationBypass[4] && !stationStatus[4]) {
-                    productID += "4号工位 ";
+                if (json_data[0]["PLC_station_error"] == "1") {
+                    warning = true;
                 }
-                if (stationBypass[5] && !stationStatus[5]) {
-                    productID += "5号工位 ";
+                for (var i = 1; i <= 10; i++) {
+                    if (json_data[0]["line1_station" + String(i) + "_error"] == "1") {
+                        error_1[i] = true;
+                    }
+                    else if (json_data[0]["line1_station" + String(i) + "_error"] == "0") {
+                        ok_1[i] = true;
+                    }
                 }
-                if (stationBypass[7] && !stationStatus[7]) {
-                    productID += "7号工位 ";
+                for (var i = 0; i < 16; i++) {
+                    if (json_data[0]["sc" + String(i)] == "1") {
+                        error_2[i] = true;
+                    }
+                    else if (json_data[0]["sc" + String(i)] == "0") {
+                        ok_2[i] = true;
+                    }
+                    if (json_data[0]["se" + String(i)] == "1") {
+                        error_3[i] = true;
+                    }
+                    else if (json_data[0]["se" + String(i)] == "0") {
+                        ok_3[i] = true;
+                    }
                 }
-                if (stationBypass[8] && !stationStatus[8]) {
-                    productID += "8号工位 ";
-                }
-                if (stationBypass[9] && !stationStatus[9]) {
-                    productID += "9号工位 ";
-                }
-                if (stationBypass[10] && !stationStatus[10]) {
-                    productID += "10号工位 ";
-                }
-            }
-            else {
-                productString = now + "产品" + productID + "质量合格";
-                PassedPSum++;
-            }
-
-            $('#productWatch').append("<p>" + productString + "</p>");
-            $('#sumofFinishedP').text(FinishedPSum);
-            $('#sumofPassedP').text(PassedPSum);
+            });
         }
 
         $(function () {
+
+            for (var i = 1; i <= 10; i++) {
+                if (error_1[i] == true) {
+                    $("#status-1-" + String(i)).attr("style", "background-color:lightcoral;");
+                }
+                else if (ok_1[i] == true) {
+                    $("#status-1-" + String(i)).attr("style", "background-color:lightgreen;");
+                }
+                else {
+                    $("#status-1-" + String(i)).removeAttr("style");
+                }
+            }
+            for (var i = 0; i < 16; i++) {
+                if (error_2[i] == true) {
+                    $("#status-2-" + String(i)).attr("style", "background-color:lightcoral;");
+                }
+                else if (ok_1[i] == true) {
+                    $("#status-2-" + String(i)).attr("style", "background-color:lightgreen;");
+                }
+                else {
+                    $("#status-2-" + String(i)).removeAttr("style");
+                }
+                if (error_3[i] == true) {
+                    $("#status-3-" + String(i)).attr("style", "background-color:lightcoral;");
+                }
+                else if (ok_3[i] == true) {
+                    $("#status-3-" + String(i)).attr("style", "background-color:lightgreen;");
+                }
+                else {
+                    $("#status-3-" + String(i)).removeAttr("style");
+                }
+            }
             if (error == true) {
                 $("div.light-status-1").attr("style", "background-color:lightcoral;");
                 $("div.light-status-2").attr("style", "background-color:lightcoral;");
@@ -679,15 +716,97 @@
             }
         });
 
+
+        function productJudge() {
+            var productString = "";
+            var productUrl = "http://localhost:8080/PASS_OK_NG";
+            var all_status;
+            var temp;
+            $.getJSON(productUrl, function (json_data) {
+                all_status = json_data[0]['allok'];
+                temp = json_data[0]['id'];
+            })
+            if (temp == productID[productID.length - 1]) {
+                console.log(123);
+                return;
+            }
+
+            else
+                productID.push(temp);
+
+            var now = new Date();
+
+            if (!all_status) {
+                var stationStatus = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var stationBypass = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                $.getJSON(productUrl, function (json_data) {
+                    stationStatus[2] = json_data[0]['line1_station2_product_OK'];
+                    stationBypass[2] = json_data[0]['line1_station2_bypass'];
+                    stationStatus[3] = json_data[0]['line1_station3_product_OK'];
+                    stationBypass[3] = json_data[0]['line1_station3_bypass'];
+                    stationStatus[4] = json_data[0]['line1_station4_product_OK'];
+                    stationBypass[4] = json_data[0]['line1_station4_bypass'];
+                    stationStatus[5] = json_data[0]['line1_station5_product_OK'];
+                    stationBypass[5] = json_data[0]['line1_station5_bypass'];
+                    stationStatus[7] = json_data[0]['line1_station7_product_OK'];
+                    stationBypass[7] = json_data[0]['line1_station7_bypass'];
+                    stationStatus[8] = json_data[0]['line1_station8_product_OK'];
+                    stationBypass[8] = json_data[0]['line1_station8_bypass'];
+                    stationStatus[10] = json_data[0]['line1_station10_product_OK'];
+                    stationBypass[10] = json_data[0]['line1_station10_bypass'];
+                })
+                productString = now + "产品" + productID + "质量不合格，问题工位为：";
+                if (!stationBypass[2] && !stationStatus[2]) {
+                    productID += "2号工位 ";
+                }
+                if (!stationBypass[3] && !stationStatus[3]) {
+                    productID += "3号工位 ";
+                }
+                if (!stationBypass[4] && !stationStatus[4]) {
+                    productID += "4号工位 ";
+                }
+                if (!stationBypass[5] && !stationStatus[5]) {
+                    productID += "5号工位 ";
+                }
+                if (!stationBypass[7] && !stationStatus[7]) {
+                    productID += "7号工位 ";
+                }
+                if (!stationBypass[8] && !stationStatus[8]) {
+                    productID += "8号工位 ";
+                }
+                if (!stationBypass[9] && !stationStatus[9]) {
+                    productID += "9号工位 ";
+                }
+                if (!stationBypass[10] && !stationStatus[10]) {
+                    productID += "10号工位 ";
+                }
+            }
+            else {
+                productString = now + "产品" + productID + "质量合格";
+
+            }
+
+            $.ajax("http://localhost:8080/get?qualified=19", {
+                method: 'GET'
+            });
+            $('#productWatch').append("<p>" + productString + "</p>");
+            $('#sumofFinishedP').text(FinishedPSum);
+            $('#sumofPassedP').text(PassedPSum);
+        }
+
         function getData() {
             var url = "http://localhost:8080/sample1";
             var station = "http://localhost:8080/l1neck";
+            var timeUrl = "http://localhost:8080/recent50";
+            var KPIUrl = "http://localhost:8080/kpi1";
+            var productid;
 
             $.getJSON(url, function (json_data) {
-                error = json_data[0]['PLC_station_error'];
-                running = json_data[0]['PLC_station_running'];
-                Stop = json_data[0]['PLC_station_stop'];
+                // error = json_data[0]['PLC_station_error'];
+                // running = json_data[0]['PLC_station_running'];
+                // Stop = json_data[0]['PLC_station_stop'];
 
+                //todo:添加id相同停止更新功能。
                 Chart1.hideLoading();
                 Chart2.hideLoading();
                 Chart3.hideLoading();
@@ -708,24 +827,107 @@
                 }
             });
 
+            $.getJSON(timeUrl, function (json_data) {
+
+            });
+
+            $.getJSON(KPIUrl, function (json_data) {
+                let pid = json_data['pid'];
+                let upTime;
+                let downTime;
+                let produceTime = json_data['time_consume'];
+
+                var KPIstring = "编号" + pid + "    上线时间：" + upTime + "    下线时间：" + downTime + "    制作时间：" + produceTime;
+                $('#KPI').append("<p>" + KPIstring + "</P>");
+            });
+
             $.getJSON(station, function (json_data) {
                 //获取瓶颈工位耗时
                 Colchart.hideLoading();
-                stationData[0] = Number(json_data[0]['line1_station2_product_time']);
-                stationData[1] = Number(json_data[0]['line1_station3_product_time']);
-                stationData[2] = Number(json_data[0]['line1_station4_product_time']);
-                stationData[3] = Number(json_data[0]['line1_station5_product_time']);
-                stationData[4] = Number(json_data[0]['line1_station7_product_time']);
-                stationData[5] = Number(json_data[0]['line1_station8_product_time']);
-                stationData[6] = Number(json_data[0]['line1_station10_product_time']);
-
-                bottleneck = Number(json_data[1]['neck']);
+                stationData[0] = Number(json_data['line1_station2_product_time']);
+                stationData[1] = Number(json_data['line1_station3_product_time']);
+                stationData[2] = Number(json_data['line1_station4_product_time']);
+                stationData[3] = Number(json_data['line1_station5_product_time']);
+                stationData[4] = Number(json_data['line1_station7_product_time']);
+                stationData[5] = Number(json_data['line1_station8_product_time']);
+                stationData[6] = Number(json_data['line1_station10_product_time']);
+                productid = Number(json_data['id']);
+                bottleneck = Number(json_data['Neck']);
             });
-            $("#bottlenID").text(bottleneck + "号");
+            $("#bottlenID").text(bottleneck + "号。当前产品id为" + productid);
+
+            Chart1.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '高度',
+                    type: 'line',
+                    data: height,
+                    stack: '值'
+                }]
+            });
+
+            Chart2.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '高度',
+                    type: 'line',
+                    data: height,
+                    stack: '值'
+                }]
+            });
+
+            Chart4.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '重量',
+                    type: 'line',
+                    data: weight,
+                    stack: '值'
+                }]
+            });
+
+            Chart3.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart5.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart6.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
         }
-
-
-        var DataType = 0; //0: Press, 1: Tight
 
         var HighPress = 0;
         var LowPress = 0;
@@ -840,11 +1042,41 @@
             document.getElementById('Tlow').value = "";
         }
 
-        function effCalc(a, b) {
-            let value = a * height[height.length - 1] + b;
-            let div = $('#eMessage');
-            div.text(value);
-        }
+        timeChartoption = {
+            title: {
+                text: '耗时分布图',
+                subtext: '测试版',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '耗时',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        { value: 1048, name: '0～10s' },
+                        { value: 735, name: '10～20s' },
+                        { value: 580, name: '20～30s' },
+                        { value: 484, name: '30～40s' },
+                        { value: 300, name: '40s以上' }
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
 
         var ColChartoption = {
             title: {
@@ -1089,81 +1321,7 @@
             if (id[id.length - 1] == id[id.length - 2])
                 return
             judge();
-            effCalc(2, 3);
-
-            Chart1.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '高度',
-                    type: 'line',
-                    data: height,
-                    stack: '值'
-                }]
-            });
-
-
-            Chart2.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '高度',
-                    type: 'line',
-                    data: height,
-                    stack: '值'
-                }]
-            });
-
-            Chart4.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '重量',
-                    type: 'line',
-                    data: weight,
-                    stack: '值'
-                }]
-            });
-
-            Chart3.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Chart5.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Chart6.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
+            // effCalc(2, 3);
         }, 1000);
 
         var Chart1 = echarts.init(document.getElementById('chart1'), 'wonderland');
@@ -1186,6 +1344,9 @@
 
         var Colchart = echarts.init(document.getElementById('ColChart'));
         Colchart.setOption(ColChartoption);
+
+        var timeChart = echarts.init(document.getElementById('timeChart'));
+        timeChart.setOption(timeChartoption);
 
     </script>
 </body>

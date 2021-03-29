@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="resource/js/jquery.js"></script>
+    <link rel="stylesheet" href="resource/css/bootstrap.min.css">
+    <link rel="stylesheet" href="resource/css/bootstrap-theme.min.css">
+    <script src="resource/js/bootstrap.min.js"></script>
+    <script src="resource/js/echarts.min.js"></script>
+    <script src="resource/js/wonderland.js"></script>
+    <title>生产线</title>
+
+    <style type=text/css>
+        div.light-status-1 {
+            width: 50px; 
+            height: 50px; 
+            border-radius:25%; 
+            background-color:gray; 
+            border-width:1px; 
+            border-style:solid; 
+            margin:0 auto
+        }
+        div.light-status-2{
+            width: 50px; 
+            height: 50px; 
+            border-radius:50%; 
+            background-color:gray; 
+            border-width:1px; 
+            border-style:solid; 
+            margin:0 auto
+        }
+        #light-stop,#light-running,#light-warning{
+            width: 100px; 
+            height: 100px; 
+            border-radius:50%; 
+            background-color:white; 
+            border-width:1px;
+            border-style:solid;
+            margin:0 auto
+        }
+        @media screen and (max-width: 1200px) and (min-width: 0px) {
+            div.row .col-sm-12 {
+                width: 100%;
+                height: 125px;
+                border: solid 2px black;
+                float: left;
+            }
+
+            div.row .col-sm-6 {
+                width: 100%;
+                height: 364px;
+                border: solid 2px black;
+                float: left;
+            }
+
+            .form-input {
+                float: left;
+                margin-top: 20px;
+                margin-right: 13px;
+                margin-left: 13px;
+            }
+        }
+
+        /* 以下为PC端自适应CSS */
+        @media screen and (min-width: 1200px) {
+            div.row .col-md-12 {
+                height: 64px;
+                /* border: solid 2px black; */
+            }
+
+            div.row .col-md-6 {
+                height: 364px;
+                /* border: solid 2px black; */
+                float: left;
+            }
+        }
+    </style>
+
+    <script>
+        $(function () {
+            getData();
+            // Chart1.showLoading();
+            Chart2.showLoading();
+            Chart3.showLoading();
+            Chart4.showLoading();
+            // Colchart.showLoading();
+            var cboxflag = [0, 0, 0, 0];
+            var checkbox1 = $('#cboxA');
+            var checkbox2 = $('#cboxB');
+            var checkbox3 = $('#cboxC');
+            var checkbox4 = $('#cboxD');
+
+            checkbox1.click(function () {
+                var c1 = $('#chart1');
+                var c11 = [$('#chart2'), $('#chart3'), $('#chart4'), $('#neckbox'), $('#box1'), $('#box2'), $('#ChangeInformation'), $('#efficiency'), $('#ColChart')];
+                var cbox1 = [$('#cboxB'), $('#cboxC'), $('#cboxD')];
+                if (!cboxflag[0]) {
+                    for (var i = 0; i < c11.length; i++) {
+                        c11[i].hide();
+                    }
+                    for (var i = 0; i < cbox1.length; i++) {
+                        cbox1[i].attr("disabled", "disabled");
+                    }
+                    cboxflag[0] = 1;
+                    checkbox1.addClass("active");
+                    c1.css("height", function () { return $(document).height() * 0.8; });
+                    c1.css("width", function () { return $(document).width(); });
+                    Chart1.resize();
+                } else {
+                    cboxflag[0] = 0;
+                    checkbox1.removeClass("active");
+                    c1.css("height", '364px');
+                    c1.css("width", '');
+                    Chart1.resize();
+                    for (var i = 0; i < c11.length; i++) {
+                        c11[i].fadeIn();
+                    }
+                    for (var i = 0; i < cbox1.length; i++) {
+                        cbox1[i].removeAttr("disabled");
+                    }
+                }
+            })
+
+            checkbox2.click(function () {
+                var c2 = $('#chart2');
+                var c12 = [$('#chart1'), $('#chart3'), $('#chart4'), $('#neckbox'), $('#box1'), $('#box2'), $('#ChangeInformation'), $('#efficiency'), $('#ColChart')];
+                var cbox2 = [$('#cboxA'), $('#cboxC'), $('#cboxD')];
+                if (!cboxflag[1]) {
+                    for (var i = 0; i < c12.length; i++) {
+                        c12[i].hide();
+                    }
+                    for (var i = 0; i < cbox2.length; i++) {
+                        cbox2[i].attr("disabled", "disabled");
+                    }
+                    cboxflag[1] = 1;
+                    checkbox2.addClass("active");
+                    c2.css("height", function () { return $(document).height() * 0.8; });
+                    c2.css("width", function () { return $(document).width(); });
+                    Chart2.resize();
+                } else {
+                    cboxflag[1] = 0;
+                    checkbox2.removeClass("active");
+                    c2.css("height", '364px');
+                    c2.css("width", '');
+                    Chart2.resize();
+                    for (var i = 0; i < c12.length; i++) {
+                        c12[i].fadeIn();
+                    }
+                    for (var i = 0; i < cbox2.length; i++) {
+                        cbox2[i].removeAttr("disabled");
+                    }
+                }
+            })
+            checkbox3.click(function () {
+                var c3 = $('#chart3');
+                var c13 = [$('#chart1'), $('#chart2'), $('#chart4'), $('#neckbox'), $('#box1'), $('#box2'), $('#ChangeInformation'), $('#efficiency'), $('#ColChart')];
+                var cbox3 = [$('#cboxB'), $('#cboxA'), $('#cboxD')];
+                if (!cboxflag[2]) {
+                    for (var i = 0; i < c13.length; i++) {
+                        c13[i].hide();
+                    }
+                    for (var i = 0; i < cbox3.length; i++) {
+                        cbox3[i].attr("disabled", "disabled");
+                    }
+                    cboxflag[2] = 1;
+                    checkbox3.addClass("active");
+                    c3.css("height", function () { return $(document).height() * 0.8; });
+                    c3.css("width", function () { return $(document).width(); });
+                    Chart3.resize();
+                } else {
+                    cboxflag[2] = 0;
+                    checkbox3.removeClass("active");
+                    c3.css("height", '364px');
+                    c3.css("width", '');
+                    Chart3.resize();
+                    for (var i = 0; i < c13.length; i++) {
+                        c13[i].fadeIn();
+                    }
+                    for (var i = 0; i < cbox3.length; i++) {
+                        cbox3[i].removeAttr("disabled");
+                    }
+                }
+            })
+            checkbox4.click(function () {
+                var c4 = $('#chart4');
+                var c14 = [$('#chart1'), $('#chart2'), $('#chart3'), $('#neckbox'), $('#box1'), $('#box2'), $('#ChangeInformation'), $('#efficiency'), $('#ColChart')];
+                var cbox4 = [$('#cboxB'), $('#cboxC'), $('#cboxA')];
+                if (!cboxflag[3]) {
+                    for (var i = 0; i < c14.length; i++) {
+                        c14[i].hide();
+                    }
+                    for (var i = 0; i < cbox4.length; i++) {
+                        cbox4[i].attr("disabled", "disabled");
+                    }
+                    cboxflag[3] = 1;
+                    checkbox4.addClass("active");
+                    c4.css("height", function () { return $(document).height() * 0.8; });
+                    c4.css("width", function () { return $(document).width(); });
+                    Chart4.resize();
+                } else {
+                    cboxflag[3] = 0;
+                    checkbox4.removeClass("active");
+                    c4.css("height", '364px');
+                    c4.css("width", '');
+                    Chart4.resize();
+                    for (var i = 0; i < c14.length; i++) {
+                        c14[i].fadeIn();
+                    }
+                    for (var i = 0; i < cbox4.length; i++) {
+                        cbox4[i].removeAttr("disabled");
+                    }
+                }
+            })
+        });
+
+        $(document).ready(function () {
+            var trigger = $('.hamburger'),
+                overlay = $('.overlay'),
+                isClosed = false;
+            trigger.click(function () {
+                hamburger_cross();
+            });
+            function hamburger_cross() {
+                if (isClosed == true) {
+                    overlay.hide();
+                    trigger.removeClass('is-open');
+                    trigger.addClass('is-closed');
+                    isClosed = false;
+                } else {
+                    overlay.show();
+                    trigger.removeClass('is-closed');
+                    trigger.addClass('is-open');
+                    isClosed = true;
+                }
+            }
+            $('[data-toggle="offcanvas"]').click(function () {
+                $('#wrapper').toggleClass('toggled');
+            });
+        });
+
+        $(window).resize(function () {
+            Chart1.resize();
+            Chart2.resize();
+            Chart3.resize();
+            Chart4.resize();
+            Colchart.resize();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div class="container-fluid">
+            <h1 align="center" class="page-header">生产线-工艺数据统计</h1>
+            <div class="tabbable">
+                <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+                    <li class="active"><a href="#tab1" data-toggle="tab">拧紧参数监控</a>
+                    </li>
+                    <li><a href="#tab2" data-toggle="tab">压装参数监控</a>
+                    </li>
+                    <li><a href="#tab3" data-toggle="tab">瓶颈工位监控</a>
+                    </li>
+                    <li><a href="#tab4" data-toggle="tab">报警页面</a>
+                    </li>
+                    <li><a href="#tab5" data-toggle="tab">状态监控</a>
+                    </li>
+                    <li><a href="#tab6" data-toggle="tab">指标监控</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <button type="button" class="btn btn-success" id="cboxA"
+                                    style="margin-left: 14.5%;margin-top: 1%;">工位一扭矩</button>
+                                <button type="button" class="btn btn-success" id="cboxB"
+                                    style="margin-left: 14.5%;margin-top: 1%;">工位一角度</button>
+                                <button type="button" class="btn btn-warning" id="cboxC"
+                                    style="margin-left: 14.5%;margin-top: 1%;">工位二扭矩</button>
+                                <button type="button" class="btn btn-warning" id="cboxD"
+                                    style="margin-left: 14.5%;margin-top: 1%;">工位二角度</button>
+                            </div>
+
+                            <div id="chart1" class="col-md-6 col-sm-6"></div>
+                            <div id="chart2" class="col-md-6 col-sm-6"></div>
+                            <div id="chart3" class="col-md-6 col-sm-6"></div>
+                            <div id="chart4" class="col-md-6 col-sm-6"></div>
+                            <!-- <div id="chart9" class="col-md-6 col-sm-6"></div> -->
+                        </div>
+                    </div>
+
+                    <div class="tab-pane active" id="tab2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div id="chart5" class="col-md-6"></div>
+                                <div id="chart6" class="col-md-6 col-sm-6"></div>
+                                <div id="chart7" class="col-md-6 col-sm-6"></div>
+                                <div id="chart8" class="col-md-6 col-sm-6"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane active" id="tab3">
+                        <div class="col-md-12 col-sm-12" id="neckbox">
+                            <div id="ColChart" style="height: 300px;"></div>
+                            <div class="alert alert-danger" role="alert">
+                                当前瓶颈工位为：<a class="alert-link" id="bottlenID"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab4">
+                        <div id="box1" style="overflow-y:auto;" class="col-md-6 col-sm-6">
+                            <div class="panel panel-danger" style="margin-top: 20px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">严重危险警报</h3>
+                                </div>
+                                <div class="panel-body" id="warningLog1"></div>
+                            </div>
+                        </div>
+                        <div id="box2" style="overflow-y:auto;" class="col-md-6 col-sm-6">
+                            <div class="panel panel-warning" style="margin-top: 20px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">潜在危险警报</h3>
+                                </div>
+                                <div class="panel-body" id="warningLog2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab5">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3>PLC状态</h3>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div id="light-stop"></div>
+                                        <h4 style="text-align: center;">停机</h4>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div id="light-running"></div>    
+                                        <h4 style="text-align: center;">运行</h4>    
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div id="light-warning"></div>
+                                        <h4 style="text-align: center;">警报</h4>    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-12">
+                                <h3>工位状态</h3>
+                                <div class="row" style="display: flex; justify-content:center;">
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-2"></div>
+                                        <h4 style="text-align: center;">OP101SA</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-3"></div>
+                                        <h4 style="text-align: center;">OP020SA</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-4"></div>
+                                        <h4 style="text-align: center;">OP030SA</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-5"></div>
+                                        <h4 style="text-align: center;">OP040A</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-7"></div>
+                                        <h4 style="text-align: center;">OP060M</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-8"></div>
+                                        <h4 style="text-align: center;">OP070A</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-10"></div>
+                                        <h4 style="text-align: center;">OP08A</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-12">
+                                <h3>通讯与上电状态</h3>
+                                <h4>通信</h4>
+                                <div class="row" style="display: flex; justify-content:center;">
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-1"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-2"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-3"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-4"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-5"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-6"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-7"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-8"></div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px; display: flex; justify-content:center;">
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-9"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-10"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-11"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-12"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-13"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-14"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-15"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-16"></div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <h4>上电</h4>
+                                <div class="row" style="display: flex; justify-content:center;">
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-1"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-2"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-3"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-4"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-5"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-6"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-7"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-8"></div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px; display: flex; justify-content:center;">
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-9"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-10"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-11"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-12"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-13"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-14"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-15"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-16"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab6">
+                        <div id="efficiency" style="height: 100%;" class="col-md-12 col-sm-12">
+                            <div class="panel panel-primary" style="text-align:center;margin-top: 50px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">指标分析</h3>
+                                </div>
+                                <p style="text-align: center;margin-top: 30px;">
+                                    <button class="btn btn-primary" type="button">
+                                        运行效率 <span class="badge" id="eMessage"></span>
+                                    </button>
+                                </p>
+                                <p style="text-align: center;">
+                                    <button class="btn btn-primary" type="button">
+                                        质量分析 <span class="badge" id="eMessage"></span>
+                                    </button>
+                                </p>
+                                <p style="text-align: center;">
+                                    <button class="btn btn-primary" type="button">
+                                        KPI <span class="badge" id="eMessage"></span>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- </div> -->
+
+
+    <script>
+        var id = [],
+            length = [],
+            width = [],
+            height = [],
+            weight = [];
+        bottleneck = 0;
+        stastionData = [0, 0, 0];
+
+        var error_1 = Array(11).fill(false);
+        var ok_1 = Array(11).fill(false);
+        var error_2 = Array(17).fill(false);
+        var ok_2 = Array(17).fill(false);
+        var error_3 = Array(17).fill(false);
+        var ok_3 = Array(17).fill(false);
+        var running = false;
+        var Stop = false;
+        var warning = false;
+        $(function(){
+            for(var i=1;i<=10;i++)
+            {
+                if(i==1||i==6||i==9){
+                    continue;
+                }
+                if(error_1[i]==true){
+                    $("#status-1-"+String(i)).attr("style","background-color:lightcoral;");
+                }
+                else if(ok_1[i]==true){
+                    $("#status-1-"+String(i)).attr("style","background-color:lightgreen;");
+                }
+                else{
+                    $("#status-1-"+String(i)).removeAttr("style");
+                }
+            }
+            for(var i=1;i<=16;i++)
+            {
+                if(error_2[i]==true){
+                    $("#status-2-"+String(i)).attr("style","background-color:lightcoral;");
+                }
+                else if(ok_1[i]==true){
+                    $("#status-2-"+String(i)).attr("style","background-color:lightgreen;");
+                }
+                else{
+                    $("#status-2-"+String(i)).removeAttr("style");
+                }
+                if(error_3[i]==true){
+                    $("#status-3-"+String(i)).attr("style","background-color:lightcoral;");
+                }
+                else if(ok_3[i]==true){
+                    $("#status-3-"+String(i)).attr("style","background-color:lightgreen;");
+                }
+                else{
+                    $("#status-3-"+String(i)).removeAttr("style");
+                }
+            }
+            if(error==true){
+                $("div.light-status-1").attr("style","background-color:lightcoral;");
+                $("div.light-status-2").attr("style","background-color:lightcoral;");
+            }
+            else{
+                $("div.light-status-1").removeAttr("style");
+                $("div.light-status-2").removeAttr("style");
+            }
+            if(running==true){
+                $("#light-running").attr("style","background-color:lightgreen");
+            }
+            else{
+                $("#light-running").removeAttr("style");   
+            }
+            if(Stop==true){
+                $("#light-stop").attr("style","background-color:gray");
+            }
+            else{
+                $("#light-stop").removeAttr("style");   
+            }
+            if(warning==true){
+                $("#light-running").attr("style","background-color:lightcoral");
+            }
+            else{
+                $("#light-running").removeAttr("style");   
+            }
+        });
+
+        function getData() {
+            var url = "http://localhost:8080/sample1";
+            var station = "http://localhost:8080/l1neck";
+            $.getJSON(url, function (json_data) {
+                Chart1.hideLoading();
+                Chart2.hideLoading();
+                Chart3.hideLoading();
+                Chart4.hideLoading();
+                Colchart.hideLoading();
+                id.push(json_data[0]['id']);
+                length.push(json_data[0]['length']);
+                width.push(json_data[0]['width']);
+                height.push(json_data[0]['height']);
+                weight.push(json_data[0]['weight']);
+
+                if (id.length > 7) {
+                    id.shift();
+                    length.shift();
+                    weight.shift();
+                    width.shift();
+                    height.shift();
+                }
+            });
+            $.getJSON(station, function (json_data) {
+                Colchart.hideLoading();
+                stastionData[0] = Number(json_data[0]['set1']);
+                stastionData[1] = Number(json_data[0]['set2']);
+                stastionData[2] = Number(json_data[0]['set3']);
+                bottleneck = Number(json_data[1]['neck']);
+            });
+            $("#bottlenID").text(bottleneck + "号");
+        }
+
+        var DataType = 0; //0: length, 1: width, 2: height, 3: weight
+
+        var HigherCountHeight = 0;
+        var LowerCountHeight = 0;
+        var HighestHeight = 17;
+        var AverageHeight = 16.5;
+        var LowestHeight = 16;
+
+        var HigherCountLength = 0;
+        var LowerCountLength = 0;
+        var HighestLength = 17;
+        var AverageLength = 16.5;
+        var LowestLength = 16;
+
+        var HigherCountWidth = 0;
+        var LowerCountWidth = 0;
+        var HighestWidth = 17;
+        var AverageWidth = 16.5;
+        var LowestWidth = 16;
+
+        var HigherCountWeight = 0;
+        var LowerCountWeight = 0;
+        var HighestWeight = 17;
+        var AverageWeight = 16.5;
+        var LowestWeight = 16;
+
+        function judge() {
+            //监测长度时执行
+
+            if (length[length.length - 1] > HighestLength) {
+                HigherCountLength++;
+                let position = document.getElementById('warningLog1');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：length值：" + length[length.length - 1] + " 大于最大阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (length[length.length - 1] < LowestLength) {
+                LowerCountLength++;
+                let position = document.getElementById('warningLog1');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：length值：" + length[length.length - 1] + " 低于最小阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (length[length.length - 1] >= AverageLength && length[length.length - 1] <= HighestLength) {
+                HigherCountLength++;
+                LowerCountLength = 0;
+            } else if (length[length.length - 1] < AverageLength && length[length.length - 1] >= LowestLength) {
+                HigherCountLength = 0;
+                LowerCountLength++;
+            }
+
+            if (HigherCountLength >= 5) {
+                let position = document.getElementById('warningLog2');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：length值连续" + HigherCountLength + "次高于中位阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (LowerCountLength >= 5) {
+                let position = document.getElementById('warningLog2');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：length值连续" + LowerCountLength + "次低于中位阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            }
+
+            //监测宽度时执行
+
+            if (width[width.length - 1] > HighestWidth) {
+                HigherCountWidth++;
+                let position = document.getElementById('warningLog1');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：width值：" + width[width.length - 1] + " 大于最大阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (width[width.length - 1] < LowestWidth) {
+                LowerCountWidth++;
+                let position = document.getElementById('warningLog1');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：width值：" + width[width.length - 1] + " 低于最小阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (width[width.length - 1] >= AverageWidth && width[width.length - 1] <= HighestWidth) {
+                HigherCountWidth++;
+                LowerCountWidth = 0;
+            } else if (width[width.length - 1] < AverageWidth && width[width.length - 1] >= LowestWidth) {
+                HigherCountWidth = 0;
+                LowerCountWidth++;
+            }
+
+            if (HigherCountWidth >= 5) {
+                let position = document.getElementById('warningLog2');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：width值连续" + HigherCountWidth + "次高于中位阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (LowerCountWidth >= 5) {
+                let position = document.getElementById('warningLog2');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：width值连续" + LowerCountWidth + "次低于中位阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            }
+
+            //监测高度时执行
+
+            if (height[height.length - 1] > HighestHeight) {
+                HigherCountHeight++;
+                let position = document.getElementById('warningLog1');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：height值：" + height[height.length - 1] + " 大于最大阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (height[height.length - 1] < LowestHeight) {
+                LowerCountHeight++;
+                let position = document.getElementById('warningLog1');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：height值：" + height[height.length - 1] + " 低于最小阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (height[height.length - 1] >= AverageHeight && height[height.length - 1] <= HighestHeight) {
+                HigherCountHeight++;
+                LowerCountHeight = 0;
+            } else if (height[height.length - 1] < AverageHeight && height[height.length - 1] >= LowestHeight) {
+                HigherCountHeight = 0;
+                LowerCountHeight++;
+            }
+
+            if (HigherCountHeight >= 5) {
+                let position = document.getElementById('warningLog2');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：height值连续" + HigherCountHeight + "次高于中位阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (LowerCountHeight >= 5) {
+                let position = document.getElementById('warningLog2');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：height值连续" + LowerCountHeight + "次低于中位阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            }
+
+            //监测重量时执行
+
+            if (weight[weight.length - 1] > HighestWeight) {
+                HigherCountWeight++;
+                let position = document.getElementById('warningLog1');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：weight值：" + weight[weight.length - 1] + " 大于最大阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (weight[weight.length - 1] < LowestWeight) {
+                LowerCountWeight++;
+                let position = document.getElementById('warningLog1');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：weight值：" + weight[weight.length - 1] + " 低于最小阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (weight[weight.length - 1] >= AverageWeight && weight[weight.length - 1] <= HighestWeight) {
+                HigherCountHeight++;
+                LowerCountWeight = 0;
+            } else if (weight[weight.length - 1] < AverageWeight && weight[weight.length - 1] >= LowestWeight) {
+                HigherCountWeight = 0;
+                LowerCountWeight++;
+            }
+
+            if (HigherCountWeight >= 5) {
+                let position = document.getElementById('warningLog2');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：weight值连续" + HigherCountWeight + "次高于中位阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            } else if (LowerCountWeight >= 5) {
+                let position = document.getElementById('warningLog2');
+                let temp = document.createElement('p');
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：weight值连续" + LowerCountWeight + "次低于中位阈值";
+                temp.innerText = warningText;
+                position.appendChild(temp);
+            }
+
+        }
+
+        $("#watch_type").change(function () {
+            var res = $(this).children("option:selected").val();
+            switch (res) {
+                case "长度":
+                    DataType = 0;
+                    break;
+                case "宽度":
+                    DataType = 1;
+                    break;
+                case "高度":
+                    DataType = 2;
+                    break;
+                case "重量":
+                    DataType = 3;
+                    break;
+            }
+        });
+
+        function ChangeInformation() {
+            switch (DataType) {
+                case 0:
+                    LowestLength = Number(document.getElementById('low').value);
+                    HighestLength = Number(document.getElementById('high').value);
+                    AverageLength = Number(document.getElementById('average').value);
+                    break;
+                case 1:
+                    LowestWidth = Number(document.getElementById('low').value);
+                    HighestWidth = Number(document.getElementById('high').value);
+                    AverageWidth = Number(document.getElementById('average').value);
+                    break;
+                case 2:
+                    LowestHeight = Number(document.getElementById('low').value);
+                    HighestHeight = Number(document.getElementById('high').value);
+                    AverageHeight = Number(document.getElementById('average').value);
+                    break;
+                case 3:
+                    LowestWeight = Number(document.getElementById('low').value);
+                    HighestWeight = Number(document.getElementById('high').value);
+                    AverageWeight = Number(document.getElementById('average').value);
+                    break;
+            }
+        }
+
+        function Reset() {
+            switch (DataType) {
+                case 0:
+                    HighestLength = 17;
+                    AverageLength = 16.5;
+                    LowestLength = 16;
+                    break;
+                case 1:
+                    HighestWidth = 17;
+                    AverageWidth = 16.5;
+                    LowestWidth = 16;
+                    break;
+                case 2:
+                    HighestHeight = 17;
+                    AverageHeight = 16.5;
+                    LowestHeight = 16;
+                    break;
+                case 3:
+                    HighestWeight = 17;
+                    AverageWeight = 16.5;
+                    LowestWeight = 16;
+                    break;
+            }
+            document.getElementById('low').value = "";
+            document.getElementById('high').value = "";
+            document.getElementById('average').value = "";
+        }
+
+        function effCalc(a, b) {
+            let value = a * height[height.length - 1] + b;
+            let div = $('#eMessage');
+            //let now = new Date();
+            div.text(value);
+        }
+
+
+        var ColChartoption = {
+            title: {
+                text: '瓶颈工位监测'
+            },
+            xAxis: {
+                name: '工位',
+                type: 'category',
+                data: ['伺服压机\nOP010SA', '液压站\nOP020SA', '人工预处理工位\nOP030SA', '自动拧紧工位\nOP040A', '人工预处理工位\nOP060M', '自动拧紧工位\nOP070A', '下料位\nOP80A']
+            },
+            yAxis: {
+                name: '耗时',
+                type: 'value'
+            },
+            series: [{
+                data: stastionData,
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                }
+            }]
+        };
+
+        var Chart1option = {
+            title: {
+                text: '工位一扭矩'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '1',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [120, 132, 101, 134, 90, 230, 210]
+                },
+                {
+                    name: '2',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [220, 182, 191, 234, 290, 330, 310]
+                },
+                {
+                    name: '3',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [150, 232, 201, 154, 190, 330, 410]
+                },
+                {
+                    name: '4',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 301, 334, 390, 330, 320]
+                },
+                {
+                    name: '5',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [820, 932, 901, 934, 1290, 1330, 1320]
+                },
+                {
+                    name: '6',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 301, 34, 390, 30, 320]
+                },
+                {
+                    name: '7',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [30, 332, 301, 334, 390, 330, 320]
+                },
+                {
+                    name: '8',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 301, 34, 390, 330, 30]
+                },
+                {
+                    name: '9',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 301, 334, 390, 330, 430]
+                },
+                {
+                    name: '10',
+                    type: 'line',
+                    stack: '扭矩',
+                    data: [320, 332, 31, 334, 30, 330, 20]
+                }
+
+            ]
+        }
+
+        var Chart2option = {
+            title: {
+                text: '高度监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['高度']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+            },
+            series: [{
+                name: '高度',
+                type: 'line',
+                data: height,
+                stack: '值'
+            }]
+        }
+
+        var Chart3option = {
+            title: {
+                text: '宽度监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['宽度']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+            },
+            series: [{
+                name: '宽度',
+                type: 'line',
+                data: width,
+                stack: '值'
+            }]
+        }
+
+        var Chart4option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+        var Chart5option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+        var Chart6option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+        var Chart7option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+        var Chart8option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+        var Chart9option = {
+            title: {
+                text: '重量监测'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['重量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: 'value',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+
+            },
+            series: [{
+                name: '重量',
+                type: 'line',
+                data: weight,
+                stack: '值'
+            }]
+        }
+
+
+        setInterval(function () {
+            getData();
+            if (id[id.length - 1] == id[id.length - 2])
+                return
+            judge();
+            effCalc(2, 3);
+            Chart1.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '长度',
+                    type: 'line',
+                    data: length,
+                    stack: '值'
+                }]
+            });
+
+            Chart2.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '高度',
+                    type: 'line',
+                    data: height,
+                    stack: '值'
+                }]
+            });
+
+            Chart4.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '重量',
+                    type: 'line',
+                    data: weight,
+                    stack: '值'
+                }]
+            });
+
+            Chart3.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart5.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart6.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart7.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart8.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart9.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+        }, 1000);
+
+        var Chart1 = echarts.init(document.getElementById('chart1'), 'wonderland');
+        Chart1.setOption(Chart1option);
+
+        var Chart2 = echarts.init(document.getElementById('chart2'), 'wonderland');
+        Chart2.setOption(Chart2option);
+
+        var Chart3 = echarts.init(document.getElementById('chart3'), 'wonderland');
+        Chart3.setOption(Chart3option);
+
+        var Chart4 = echarts.init(document.getElementById('chart4'), 'wonderland');
+        Chart4.setOption(Chart4option);
+
+        var Chart5 = echarts.init(document.getElementById('chart5'), 'wonderland');
+        Chart5.setOption(Chart5option);
+
+        var Chart6 = echarts.init(document.getElementById('chart6'), 'wonderland');
+        Chart6.setOption(Chart6option);
+
+        var Chart7 = echarts.init(document.getElementById('chart7'), 'wonderland');
+        Chart7.setOption(Chart7option);
+
+        var Chart8 = echarts.init(document.getElementById('chart8'), 'wonderland');
+        Chart8.setOption(Chart8option);
+
+        // var Chart9 = echarts.init(document.getElementById('chart9'), 'wonderland');
+        // Chart9.setOption(Chart9option);
+
+        var Colchart = echarts.init(document.getElementById('ColChart'));
+        Colchart.setOption(ColChartoption);
+
+    </script>
+</body>
+
+</html>
