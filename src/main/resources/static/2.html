@@ -14,52 +14,50 @@
 
     <style type=text/css>
         div.light-status-1 {
-            width: 50px; 
-            height: 50px; 
-            border-radius:25%; 
-            background-color:gray; 
-            border-width:1px; 
-            border-style:solid; 
-            margin:0 auto
+            width: 50px;
+            height: 50px;
+            border-radius: 25%;
+            background-color: gray;
+            border-width: 1px;
+            border-style: solid;
+            margin: 0 auto
         }
-        div.light-status-2{
-            width: 50px; 
-            height: 50px; 
-            border-radius:50%; 
-            background-color:gray; 
-            border-width:1px; 
-            border-style:solid; 
-            margin:0 auto
+
+        div.light-status-2 {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: gray;
+            border-width: 1px;
+            border-style: solid;
+            margin: 0 auto
         }
-        #light-stop,#light-running,#light-warning{
-            width: 100px; 
-            height: 100px; 
-            border-radius:50%; 
-            background-color:white; 
-            border-width:1px;
-            border-style:solid;
-            margin:0 auto
+
+        #light-stop,
+        #light-running,
+        #light-warning {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: white;
+            border-width: 1px;
+            border-style: solid;
+            margin: 0 auto
         }
+
         @media screen and (max-width: 1200px) and (min-width: 0px) {
             div.row .col-sm-12 {
                 width: 100%;
                 height: 125px;
-                border: solid 2px black;
+                /* border: solid 2px black; */
                 float: left;
             }
 
             div.row .col-sm-6 {
                 width: 100%;
                 height: 364px;
-                border: solid 2px black;
+                /* border: solid 2px black; */
                 float: left;
-            }
-
-            .form-input {
-                float: left;
-                margin-top: 20px;
-                margin-right: 13px;
-                margin-left: 13px;
             }
         }
 
@@ -79,13 +77,22 @@
     </style>
 
     <script>
+        var pressFlag = 0;
+        var tightFlag = 0;
+        var pSum = 0;
+        var tab1Sum = 0;
+        var tab2Sum = 0;
+        var tab3Sum = 0;
+        var tab4Sum = 0;
+        var tab5Sum = 0;
+
         $(function () {
             getData();
-            // Chart1.showLoading();
+            Chart1.showLoading();
             Chart2.showLoading();
             Chart3.showLoading();
             Chart4.showLoading();
-            // Colchart.showLoading();
+            Colchart.showLoading();
             var cboxflag = [0, 0, 0, 0];
             var checkbox1 = $('#cboxA');
             var checkbox2 = $('#cboxB');
@@ -93,8 +100,8 @@
             var checkbox4 = $('#cboxD');
 
             checkbox1.click(function () {
-                var c1 = $('#chart1');
-                var c11 = [$('#chart2'), $('#chart3'), $('#chart4'), $('#neckbox'), $('#box1'), $('#box2'), $('#ChangeInformation'), $('#efficiency'), $('#ColChart')];
+                var c1 = $('#chart3');
+                var c11 = [$('#chart4'), $('#chart5'), $('#chart6')];
                 var cbox1 = [$('#cboxB'), $('#cboxC'), $('#cboxD')];
                 if (!cboxflag[0]) {
                     for (var i = 0; i < c11.length; i++) {
@@ -107,13 +114,13 @@
                     checkbox1.addClass("active");
                     c1.css("height", function () { return $(document).height() * 0.8; });
                     c1.css("width", function () { return $(document).width(); });
-                    Chart1.resize();
+                    Chart3.resize();
                 } else {
                     cboxflag[0] = 0;
                     checkbox1.removeClass("active");
                     c1.css("height", '364px');
                     c1.css("width", '');
-                    Chart1.resize();
+                    Chart3.resize();
                     for (var i = 0; i < c11.length; i++) {
                         c11[i].fadeIn();
                     }
@@ -124,8 +131,8 @@
             })
 
             checkbox2.click(function () {
-                var c2 = $('#chart2');
-                var c12 = [$('#chart1'), $('#chart3'), $('#chart4'), $('#neckbox'), $('#box1'), $('#box2'), $('#ChangeInformation'), $('#efficiency'), $('#ColChart')];
+                var c2 = $('#chart4');
+                var c12 = [$('#chart5'), $('#chart3'), $('#chart6')];
                 var cbox2 = [$('#cboxA'), $('#cboxC'), $('#cboxD')];
                 if (!cboxflag[1]) {
                     for (var i = 0; i < c12.length; i++) {
@@ -138,13 +145,13 @@
                     checkbox2.addClass("active");
                     c2.css("height", function () { return $(document).height() * 0.8; });
                     c2.css("width", function () { return $(document).width(); });
-                    Chart2.resize();
+                    Chart4.resize();
                 } else {
                     cboxflag[1] = 0;
                     checkbox2.removeClass("active");
                     c2.css("height", '364px');
                     c2.css("width", '');
-                    Chart2.resize();
+                    Chart4.resize();
                     for (var i = 0; i < c12.length; i++) {
                         c12[i].fadeIn();
                     }
@@ -154,8 +161,8 @@
                 }
             })
             checkbox3.click(function () {
-                var c3 = $('#chart3');
-                var c13 = [$('#chart1'), $('#chart2'), $('#chart4'), $('#neckbox'), $('#box1'), $('#box2'), $('#ChangeInformation'), $('#efficiency'), $('#ColChart')];
+                var c3 = $('#chart5');
+                var c13 = [$('#chart4'), $('#chart3'), $('#chart6')];
                 var cbox3 = [$('#cboxB'), $('#cboxA'), $('#cboxD')];
                 if (!cboxflag[2]) {
                     for (var i = 0; i < c13.length; i++) {
@@ -168,13 +175,13 @@
                     checkbox3.addClass("active");
                     c3.css("height", function () { return $(document).height() * 0.8; });
                     c3.css("width", function () { return $(document).width(); });
-                    Chart3.resize();
+                    Chart5.resize();
                 } else {
                     cboxflag[2] = 0;
                     checkbox3.removeClass("active");
                     c3.css("height", '364px');
                     c3.css("width", '');
-                    Chart3.resize();
+                    Chart5.resize();
                     for (var i = 0; i < c13.length; i++) {
                         c13[i].fadeIn();
                     }
@@ -183,9 +190,10 @@
                     }
                 }
             })
+
             checkbox4.click(function () {
-                var c4 = $('#chart4');
-                var c14 = [$('#chart1'), $('#chart2'), $('#chart3'), $('#neckbox'), $('#box1'), $('#box2'), $('#ChangeInformation'), $('#efficiency'), $('#ColChart')];
+                var c4 = $('#chart6');
+                var c14 = [$('#chart4'), $('#chart5'), $('#chart3')];
                 var cbox4 = [$('#cboxB'), $('#cboxC'), $('#cboxA')];
                 if (!cboxflag[3]) {
                     for (var i = 0; i < c14.length; i++) {
@@ -198,13 +206,13 @@
                     checkbox4.addClass("active");
                     c4.css("height", function () { return $(document).height() * 0.8; });
                     c4.css("width", function () { return $(document).width(); });
-                    Chart4.resize();
+                    Chart6.resize();
                 } else {
                     cboxflag[3] = 0;
                     checkbox4.removeClass("active");
                     c4.css("height", '364px');
                     c4.css("width", '');
-                    Chart4.resize();
+                    Chart6.resize();
                     for (var i = 0; i < c14.length; i++) {
                         c14[i].fadeIn();
                     }
@@ -215,36 +223,13 @@
             })
         });
 
-        $(document).ready(function () {
-            var trigger = $('.hamburger'),
-                overlay = $('.overlay'),
-                isClosed = false;
-            trigger.click(function () {
-                hamburger_cross();
-            });
-            function hamburger_cross() {
-                if (isClosed == true) {
-                    overlay.hide();
-                    trigger.removeClass('is-open');
-                    trigger.addClass('is-closed');
-                    isClosed = false;
-                } else {
-                    overlay.show();
-                    trigger.removeClass('is-closed');
-                    trigger.addClass('is-open');
-                    isClosed = true;
-                }
-            }
-            $('[data-toggle="offcanvas"]').click(function () {
-                $('#wrapper').toggleClass('toggled');
-            });
-        });
-
         $(window).resize(function () {
             Chart1.resize();
             Chart2.resize();
             Chart3.resize();
             Chart4.resize();
+            Chart5.resize();
+            Chart6.resize();
             Colchart.resize();
         });
     </script>
@@ -253,52 +238,102 @@
 <body>
     <div id="wrapper">
         <div class="container-fluid">
-            <h1 align="center" class="page-header">生产线-工艺数据统计</h1>
+            <h1 align="center" class="page-header">生产线工艺数据统计
+                <button class="btn btn-default" type="button" id="warningWatch" style="float:right" onclick="warningBtn()">
+                    报警界面
+                </button>
+                <button class="btn btn-default" type="button" id="statusWatch" style="float:right;margin-right: 5px;" onclick="statusBtn()">
+                    状态监控
+                </button>
+            </h1>
             <div class="tabbable">
                 <ul class="nav nav-tabs" style="margin-bottom: 10px;">
-                    <li class="active"><a href="#tab1" data-toggle="tab">拧紧参数监控</a>
+                    <li class="active" id="tab_btn_1"><a href="#tab1" data-toggle="tab">拧紧参数监控</a>
                     </li>
-                    <li><a href="#tab2" data-toggle="tab">压装参数监控</a>
+                    <li id="tab_btn_2"><a href="#tab2" data-toggle="tab">压装参数监控</a>
                     </li>
-                    <li><a href="#tab3" data-toggle="tab">瓶颈工位监控</a>
+                    <li id="tab_btn_3"><a href="#tab3" data-toggle="tab">瓶颈工位监控</a>
                     </li>
-                    <li><a href="#tab4" data-toggle="tab">报警页面</a>
+                    <li id="tab_btn_4"><a href="#tab4" data-toggle="tab">报警页面</a>
                     </li>
-                    <li><a href="#tab5" data-toggle="tab">状态监控</a>
+                    <li  id="tab_btn_5"><a href="#tab5" data-toggle="tab">状态监控</a>
                     </li>
-                    <li><a href="#tab6" data-toggle="tab">指标监控</a>
+                    <li id="tab_btn_6"><a href="#tab6" data-toggle="tab">指标监控</a>
+                    </li>
+                    <li id="tab_btn_7"><a href="#tab7" data-toggle="tab">产品信息</a>
                     </li>
                 </ul>
 
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
                         <div class="row">
-                            <div class="col-md-12 col-sm-12">
-                                <button type="button" class="btn btn-success" id="cboxA"
-                                    style="margin-left: 14.5%;margin-top: 1%;">工位一扭矩</button>
-                                <button type="button" class="btn btn-success" id="cboxB"
-                                    style="margin-left: 14.5%;margin-top: 1%;">工位一角度</button>
-                                <button type="button" class="btn btn-warning" id="cboxC"
-                                    style="margin-left: 14.5%;margin-top: 1%;">工位二扭矩</button>
-                                <button type="button" class="btn btn-warning" id="cboxD"
-                                    style="margin-left: 14.5%;margin-top: 1%;">工位二角度</button>
-                            </div>
-
-                            <div id="chart1" class="col-md-6 col-sm-6"></div>
-                            <div id="chart2" class="col-md-6 col-sm-6"></div>
-                            <div id="chart3" class="col-md-6 col-sm-6"></div>
-                            <div id="chart4" class="col-md-6 col-sm-6"></div>
-                            <!-- <div id="chart9" class="col-md-6 col-sm-6"></div> -->
+                            <div id="chart1" class="col-md-12 col-sm-12" style="height: 364px;"></div>
+                            <div id="chart2" class="col-md-12 col-sm-12" style="height: 364px;"></div>
+                            <form id="ChangeTight" class="col-md-12 col-sm-12" style="margin-left: 40%;width: 20%;">
+                                <p>
+                                <h3 align="center">拧紧参数阈值修改</h3>
+                                <p>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon3">高位阈值</span>
+                                    <input type="text" class="form-control" id="Thigh" aria-describedby="basic-addon3">
+                                </div>
+                                </p>
+                                <p>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon3">低位阈值</span>
+                                    <input type="text" class="form-control" id="Tlow" aria-describedby="basic-addon3">
+                                </div>
+                                </p>
+                                <p style="text-align:center;">
+                                    <button type="button" class="btn btn-success" onclick="ChangePress()">提交</button>
+                                    <button type="button" onclick="Reset()" class="btn btn-warning">重置</button>
+                                </p>
+                            </form>
                         </div>
                     </div>
+
 
                     <div class="tab-pane active" id="tab2">
                         <div class="container-fluid">
                             <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <button type="button" class="btn btn-success" id="cboxA"
+                                        style="margin-left: 14.5%;margin-top: 1%;">压装1</button>
+                                    <button type="button" class="btn btn-success" id="cboxB"
+                                        style="margin-left: 14.5%;margin-top: 1%;">压装2</button>
+                                    <button type="button" class="btn btn-warning" id="cboxC"
+                                        style="margin-left: 14.5%;margin-top: 1%;">压装3</button>
+                                    <button type="button" class="btn btn-warning" id="cboxD"
+                                        style="margin-left: 14.5%;margin-top: 1%;">压装4</button>
+                                </div>
+                                <div id="chart3" class="col-md-6"></div>
+                                <div id="chart4" class="col-md-6"></div>
                                 <div id="chart5" class="col-md-6"></div>
-                                <div id="chart6" class="col-md-6 col-sm-6"></div>
-                                <div id="chart7" class="col-md-6 col-sm-6"></div>
-                                <div id="chart8" class="col-md-6 col-sm-6"></div>
+                                <div id="chart6" class="col-md-6"></div>
+
+                                <form id="ChangePress" class="col-md-12 col-sm-12" style="margin-left: 40%;width: 20%;">
+                                    <p>
+                                    <h3 align="center">压装参数阈值修改</h3>
+                                    <p>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon3">高位阈值</span>
+                                        <input type="text" class="form-control" id="Phigh"
+                                            aria-describedby="basic-addon3">
+                                    </div>
+                                    </p>
+                                    <p>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon3">低位阈值</span>
+                                        <input type="text" class="form-control" id="Plow"
+                                            aria-describedby="basic-addon3">
+                                    </div>
+                                    </p>
+                                    <p style="text-align:center;">
+                                        <button type="button" class="btn btn-success"
+                                            onclick="ChangePress()">提交</button>
+                                        <button type="button" onclick="Reset()" class="btn btn-warning">重置</button>
+                                    </p>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -306,7 +341,7 @@
                     <div class="tab-pane active" id="tab3">
                         <div class="col-md-12 col-sm-12" id="neckbox">
                             <div id="ColChart" style="height: 300px;"></div>
-                            <div class="alert alert-danger" role="alert">
+                            <div class="alert alert-danger" role="alert" style="text-align: center;">
                                 当前瓶颈工位为：<a class="alert-link" id="bottlenID"></a>
                             </div>
                         </div>
@@ -341,12 +376,12 @@
                                         <h4 style="text-align: center;">停机</h4>
                                     </div>
                                     <div class="col-md-4">
-                                        <div id="light-running"></div>    
-                                        <h4 style="text-align: center;">运行</h4>    
+                                        <div id="light-running"></div>
+                                        <h4 style="text-align: center;">运行</h4>
                                     </div>
                                     <div class="col-md-4">
                                         <div id="light-warning"></div>
-                                        <h4 style="text-align: center;">警报</h4>    
+                                        <h4 style="text-align: center;">警报</h4>
                                     </div>
                                 </div>
                             </div>
@@ -356,6 +391,10 @@
                             <div class="col-12">
                                 <h3>工位状态</h3>
                                 <div class="row" style="display: flex; justify-content:center;">
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-1"></div>
+                                        <h4 style="text-align: center;">OP005A</h4>
+                                    </div>
                                     <div class="col-md-1">
                                         <div class="light-status-1" id="status-1-2"></div>
                                         <h4 style="text-align: center;">OP101SA</h4>
@@ -373,12 +412,20 @@
                                         <h4 style="text-align: center;">OP040A</h4>
                                     </div>
                                     <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-6"></div>
+                                        <h4 style="text-align: center;">OP050A</h4>
+                                    </div>
+                                    <div class="col-md-1">
                                         <div class="light-status-1" id="status-1-7"></div>
                                         <h4 style="text-align: center;">OP060M</h4>
                                     </div>
                                     <div class="col-md-1">
                                         <div class="light-status-1" id="status-1-8"></div>
                                         <h4 style="text-align: center;">OP070A</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="light-status-1" id="status-1-9"></div>
+                                        <h4 style="text-align: center;">OP075M</h4>
                                     </div>
                                     <div class="col-md-1">
                                         <div class="light-status-1" id="status-1-10"></div>
@@ -393,6 +440,9 @@
                                 <h3>通讯与上电状态</h3>
                                 <h4>通信</h4>
                                 <div class="row" style="display: flex; justify-content:center;">
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-2-0"></div>
+                                    </div>
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-2-1"></div>
                                     </div>
@@ -414,11 +464,11 @@
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-2-7"></div>
                                     </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px; display: flex; justify-content:center;">
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-2-8"></div>
                                     </div>
-                                </div>
-                                <div class="row" style="margin-top: 10px; display: flex; justify-content:center;">
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-2-9"></div>
                                     </div>
@@ -440,13 +490,13 @@
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-2-15"></div>
                                     </div>
-                                    <div class="col-md-1">
-                                        <div class="light-status-2" id="status-2-16"></div>
-                                    </div>
                                 </div>
                                 <hr>
                                 <h4>上电</h4>
                                 <div class="row" style="display: flex; justify-content:center;">
+                                    <div class="col-md-1">
+                                        <div class="light-status-2" id="status-3-0"></div>
+                                    </div>
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-3-1"></div>
                                     </div>
@@ -468,11 +518,11 @@
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-3-7"></div>
                                     </div>
+                                </div>
+                                <div class="row" style="margin-top: 10px; display: flex; justify-content:center;">
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-3-8"></div>
                                     </div>
-                                </div>
-                                <div class="row" style="margin-top: 10px; display: flex; justify-content:center;">
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-3-9"></div>
                                     </div>
@@ -494,35 +544,73 @@
                                     <div class="col-md-1">
                                         <div class="light-status-2" id="status-3-15"></div>
                                     </div>
-                                    <div class="col-md-1">
-                                        <div class="light-status-2" id="status-3-16"></div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="tab-pane" id="tab6">
-                        <div id="efficiency" style="height: 100%;" class="col-md-12 col-sm-12">
-                            <div class="panel panel-primary" style="text-align:center;margin-top: 50px;">
+                    <div class="tab-pane active" id="tab6">
+                        <div class="col-md-6">
+                            <div class="panel panel-primary" style="text-align:center;margin-top: 50px;height: 300px;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">指标分析</h3>
+                                    <h3 class="panel-title">产品-耗时统计结果图</h3>
+                                </div>
+                                <div id="timeChart" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="panel panel-primary" style="text-align:center;margin-top: 50px;height: 300px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">统计结果展示</h3>
                                 </div>
                                 <p style="text-align: center;margin-top: 30px;">
                                     <button class="btn btn-primary" type="button">
-                                        运行效率 <span class="badge" id="eMessage"></span>
+                                        完成产品数 <span class="badge" id="sumofFinishedP">0</span>
                                     </button>
                                 </p>
                                 <p style="text-align: center;">
                                     <button class="btn btn-primary" type="button">
-                                        质量分析 <span class="badge" id="eMessage"></span>
+                                        合格产品数 <span class="badge" id="sumofPassedP">0</span>
                                     </button>
                                 </p>
                                 <p style="text-align: center;">
                                     <button class="btn btn-primary" type="button">
-                                        KPI <span class="badge" id="eMessage"></span>
+                                        产品合格率 <span class="badge" id="passRate">0</span>
                                     </button>
                                 </p>
+                                <p style="text-align: center;">
+                                    <button class="btn btn-primary" type="button">
+                                        拧紧合格率 <span class="badge" id="tightRate">0</span>
+                                    </button>
+                                </p>
+                                <p style="text-align: center;">
+                                    <button class="btn btn-primary" type="button">
+                                        压装合格率 <span class="badge" id="pressRate">0</span>
+                                    </button>
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane active" id="tab7">
+                        <div class="col-md-12">
+                            <div style="height: 300px;overflow-y:auto;">
+                                <div class="panel panel-warning" style="margin-top: 20px;">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">产品监控</h3>
+                                    </div>
+                                    <div class="panel-body" id="productWatch"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="height: 300px;overflow-y:auto;" class="col-md-12 col-sm-12">
+                            <div class="panel panel-primary" style="margin-top: 20px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">产品KPI</h3>
+                                </div>
+                                <div class="panel-body" id="KPI"></div>
                             </div>
                         </div>
                     </div>
@@ -531,102 +619,244 @@
             </div>
         </div>
     </div>
-    <!-- </div> -->
-
 
     <script>
-        var id = [],
-            length = [],
+        var length = [],
             width = [],
             height = [],
-            weight = [];
-        bottleneck = 0;
-        stastionData = [0, 0, 0];
+            weight = [],
+            bottleneck = 0,
+            stationData = Array(7).fill(0),
+            pieData = [
+                { value: 0, name: '0～10s' },
+                { value: 0, name: '10～20s' },
+                { value: 0, name: '20～30s' },
+                { value: 0, name: '30～40s' },
+                { value: 0, name: '40～50s' },
+                { value: 0, name: '50～60s' },
+                { value: 0, name: '60～70s' },
+                { value: 0, name: '70～80s' },
+                { value: 0, name: '80～90s' },
+                { value: 0, name: '90s以上' }
+            ],
+            id = [],
+            productID = [];
 
-        var error_1 = Array(11).fill(false);
-        var ok_1 = Array(11).fill(false);
-        var error_2 = Array(17).fill(false);
-        var ok_2 = Array(17).fill(false);
-        var error_3 = Array(17).fill(false);
-        var ok_3 = Array(17).fill(false);
-        var running = false;
-        var Stop = false;
-        var warning = false;
-        $(function(){
-            for(var i=1;i<=10;i++)
+        var station_status = Array(11).fill(0);//工位状态监控
+        var sp_status = Array(16).fill(0);//0代表产线未运行，1代表产线正常运行，2代表产线出现错误
+        var sc_status = Array(16).fill(0);//0代表产线未运行，1代表产线正常运行，2代表产线出现错误
+        var PLCstatus = 0;//0代表产线未运行，1代表产线正常运行，2代表产线出现错误
+
+        function statusBtn() {
+            for(var i=1;i<=7;i++)
             {
-                if(i==1||i==6||i==9){
-                    continue;
-                }
-                if(error_1[i]==true){
-                    $("#status-1-"+String(i)).attr("style","background-color:lightcoral;");
-                }
-                else if(ok_1[i]==true){
-                    $("#status-1-"+String(i)).attr("style","background-color:lightgreen;");
-                }
-                else{
-                    $("#status-1-"+String(i)).removeAttr("style");
-                }
+                $("#tab"+String(i)).attr("class","tab-pane");
+                $("#tab_btn_"+String(i)).removeAttr("class");   
             }
-            for(var i=1;i<=16;i++)
+            $("#tab_btn_5").attr("class","active");
+            $("#tab5").attr("class","tab-pane active");
+            $("#statusWatch").attr("class","btn btn-default");
+        }
+
+        function warningBtn() {
+            for(var i=1;i<=7;i++)
             {
-                if(error_2[i]==true){
-                    $("#status-2-"+String(i)).attr("style","background-color:lightcoral;");
+                $("#tab"+String(i)).attr("class","tab-pane");
+                $("#tab_btn_"+String(i)).removeAttr("class");   
+            }
+            $("#tab_btn_4").attr("class","active");
+            $("#tab4").attr("class","tab-pane active");
+            $("#warningWatch").attr("class","btn btn-default");
+        }
+        
+        function stateWatch() {
+            var stateUrl = "http://localhost:8080/states"
+            $.getJSON(stateUrl, function (json_data) {
+                if (json_data['PLC_station_running'] == "1") {
+                    PLCstatus = 1;
                 }
-                else if(ok_1[i]==true){
-                    $("#status-2-"+String(i)).attr("style","background-color:lightgreen;");
+                if (json_data["PLC_station_stop"] == "1") {
+                    PLCstatus = 0;
                 }
-                else{
-                    $("#status-2-"+String(i)).removeAttr("style");
+                if (json_data["PLC_station_error"] == "1") {
+                    PLCstatus = 2;
                 }
-                if(error_3[i]==true){
-                    $("#status-3-"+String(i)).attr("style","background-color:lightcoral;");
+
+                for (var i = 1; i <= 10; i++) {
+                    if (json_data["line1_station" + String(i) + "_error"] == "1") {
+                        station_status[i] = 2;
+                    }
+                    else if (json_data["line1_station" + String(i) + "_error"] == "0") {
+                        station_status[i] = 1;
+                    }
                 }
-                else if(ok_3[i]==true){
-                    $("#status-3-"+String(i)).attr("style","background-color:lightgreen;");
+
+                for (var i = 0; i < 16; i++) {
+                    if (json_data["sc" + String(i)] == "0") {
+                        sc_status[i] = 2;
+                    }
+                    else if (json_data["sc" + String(i)] == "1") {
+                        sc_status[i] = 1;
+                    }
+                    if (json_data["se" + String(i)] == "0") {
+                        sp_status[i] = 2;
+                    }
+                    else if (json_data["se" + String(i)] == "1") {
+                        sp_status[i] = 1;
+                    }
                 }
-                else{
-                    $("#status-3-"+String(i)).removeAttr("style");
+            });
+
+
+            for (var i = 1; i <= 10; i++) {
+                if (station_status[i] == 2) {
+                    $("#status-1-" + String(i)).attr("style", "background-color:lightcoral;");
+                    $("#statusWatch").attr('class','btn btn-danger');
+                }
+                else if (station_status[i] == 1) {
+                    $("#status-1-" + String(i)).attr("style", "background-color:lightgreen;");
+                }
+                else {
+                    $("#status-1-" + String(i)).removeAttr("style");
                 }
             }
-            if(error==true){
-                $("div.light-status-1").attr("style","background-color:lightcoral;");
-                $("div.light-status-2").attr("style","background-color:lightcoral;");
+
+            for (var i = 0; i < 16; i++) {
+                if (sc_status[i] == 2) {
+                    $("#status-2-" + String(i)).attr("style", "background-color:lightcoral;");
+                    $("#statusWatch").attr('class','btn btn-danger');
+                }
+                else if (sc_status[i] == 1) {
+                    $("#status-2-" + String(i)).attr("style", "background-color:lightgreen;");
+                }
+                else {
+                    $("#status-2-" + String(i)).removeAttr("style");
+                }
+
+                if (sp_status[i] == 2) {
+                    $("#status-3-" + String(i)).attr("style", "background-color:lightcoral;");
+                    $("#statusWatch").attr('class','btn btn-danger');
+                }
+                else if (sp_status[i] == 1) {
+                    $("#status-3-" + String(i)).attr("style", "background-color:lightgreen;");
+                }
+                else {
+                    $("#status-3-" + String(i)).removeAttr("style");
+                }
             }
-            else{
-                $("div.light-status-1").removeAttr("style");
-                $("div.light-status-2").removeAttr("style");
+
+            // if (PLCstatus == 0) {
+            //     $("div.light-status-1").attr("style", "background-color:lightcoral;");
+            //     $("div.light-status-2").attr("style", "background-color:lightcoral;");
+            // }
+            // else {
+            //     $("div.light-status-1").removeAttr("style");
+            //     $("div.light-status-2").removeAttr("style");
+            // }
+
+            if (PLCstatus == 1) {
+                $("#light-running").attr("style", "background-color:lightgreen");
             }
-            if(running==true){
-                $("#light-running").attr("style","background-color:lightgreen");
+            else {
+                $("#light-running").removeAttr("style");
             }
-            else{
-                $("#light-running").removeAttr("style");   
+            if (PLCstatus == 0) {
+                $("#light-stop").attr("style", "background-color:gray");
             }
-            if(Stop==true){
-                $("#light-stop").attr("style","background-color:gray");
+            else {
+                $("#light-stop").removeAttr("style");
             }
-            else{
-                $("#light-stop").removeAttr("style");   
+            if (PLCstatus == 2) {
+                $("#light-warning").attr("style", "background-color:lightcoral");
+                $("#statusWatch").attr('class','btn btn-danger');
             }
-            if(warning==true){
-                $("#light-running").attr("style","background-color:lightcoral");
+            else {
+                $("#light-warning").removeAttr("style");
             }
-            else{
-                $("#light-running").removeAttr("style");   
+        }
+
+        function productJudge() {
+            var productString = "";
+            var productUrl = "http://localhost:8080/PASS_OK_NG";
+            var all_status;
+            $.getJSON(productUrl, function (json_data) {
+                all_status = json_data['allok'];
+                productID = (json_data['id']);
+            })
+
+            var now = new Date();
+
+            if (!all_status) {
+                var stationStatus = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                var stationBypass = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                $.getJSON(productUrl, function (json_data) {
+                    stationStatus[2] = json_data['line1_station2_product_OK'];
+                    stationBypass[2] = json_data['line1_station2_bypass'];
+                    stationStatus[3] = json_data['line1_station3_product_OK'];
+                    stationBypass[3] = json_data['line1_station3_bypass'];
+                    stationStatus[4] = json_data['line1_station4_product_OK'];
+                    stationBypass[4] = json_data['line1_station4_bypass'];
+                    stationStatus[5] = json_data['line1_station5_product_OK'];
+                    stationBypass[5] = json_data['line1_station5_bypass'];
+                    stationStatus[7] = json_data['line1_station7_product_OK'];
+                    stationBypass[7] = json_data['line1_station7_bypass'];
+                    stationStatus[8] = json_data['line1_station8_product_OK'];
+                    stationBypass[8] = json_data['line1_station8_bypass'];
+                    stationStatus[10] = json_data['line1_station10_product_OK'];
+                    stationBypass[10] = json_data['line1_station10_bypass'];
+                })
+                productString = now + "产品" + productID + "质量不合格，问题工位为：";
+                if (!stationBypass[2] && !stationStatus[2]) {
+                    productString += "2号工位 ";
+                }
+                if (!stationBypass[3] && !stationStatus[3]) {
+                    productString += "3号工位 ";
+                }
+                if (!stationBypass[4] && !stationStatus[4]) {
+                    productString += "4号工位 ";
+                }
+                if (!stationBypass[5] && !stationStatus[5]) {
+                    productString += "5号工位 ";
+                }
+                if (!stationBypass[7] && !stationStatus[7]) {
+                    productString += "7号工位 ";
+                }
+                if (!stationBypass[8] && !stationStatus[8]) {
+                    productString += "8号工位 ";
+                }
+                if (!stationBypass[9] && !stationStatus[9]) {
+                    productString += "9号工位 ";
+                }
+                if (!stationBypass[10] && !stationStatus[10]) {
+                    productString += "10号工位 ";
+                }
             }
-        });
+            else {
+                productString = now + "产品" + productID + "质量合格";
+            }
+
+            $.ajax("http://localhost:8080/get?qualified=19", {
+                method: 'GET'
+            });
+
+            $('#productWatch').append("<p>" + productString + "</p>");
+            // $('#sumofFinishedP').text(FinishedPSum);
+            // $('#sumofPassedP').text(PassedPSum);
+        }
 
         function getData() {
             var url = "http://localhost:8080/sample1";
             var station = "http://localhost:8080/l1neck";
+            var timeUrl = "http://localhost:8080/recent50";
+            var KPIUrl = "http://localhost:8080/kpi1";
+
             $.getJSON(url, function (json_data) {
                 Chart1.hideLoading();
                 Chart2.hideLoading();
                 Chart3.hideLoading();
                 Chart4.hideLoading();
                 Colchart.hideLoading();
-                id.push(json_data[0]['id']);
+                id.push(json_data[0]['id'])
                 length.push(json_data[0]['length']);
                 width.push(json_data[0]['width']);
                 height.push(json_data[0]['height']);
@@ -640,45 +870,127 @@
                     height.shift();
                 }
             });
-            $.getJSON(station, function (json_data) {
-                Colchart.hideLoading();
-                stastionData[0] = Number(json_data[0]['set1']);
-                stastionData[1] = Number(json_data[0]['set2']);
-                stastionData[2] = Number(json_data[0]['set3']);
-                bottleneck = Number(json_data[1]['neck']);
+
+            $.getJSON(timeUrl, function (json_data) {
+                for (var i = 0; i < 10; i++) {
+                    pieData[i].value = Number(json_data[i]);
+                }
             });
-            $("#bottlenID").text(bottleneck + "号");
+
+            $.getJSON(KPIUrl, function (json_data) {
+                let pid = json_data['pid'];
+                let upTime;
+                let downTime;
+                let produceTime = json_data['time_consume'];
+
+                var KPIstring = "编号" + pid + "    上线时间：" + upTime + "    下线时间：" + downTime + "    制作时间：" + produceTime;
+                $('#KPI').append("<p>" + KPIstring + "</P>");
+            });
+
+            $.getJSON(station, function (json_data) {
+                //获取瓶颈工位耗时
+                Colchart.hideLoading();
+                stationData[0] = Number(json_data['line1_station2_product_time']);
+                stationData[1] = Number(json_data['line1_station3_product_time']);
+                stationData[2] = Number(json_data['line1_station4_product_time']);
+                stationData[3] = Number(json_data['line1_station5_product_time']);
+                stationData[4] = Number(json_data['line1_station7_product_time']);
+                stationData[5] = Number(json_data['line1_station8_product_time']);
+                stationData[6] = Number(json_data['line1_station10_product_time']);
+                $("#bottlenID").text(Number(json_data['Neck']) + "号 当前产品id为" + Number(json_data['id']));
+            });
+
+            Chart1.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    type: 'line',
+                    data: height,
+                    stack: '值'
+                }]
+            });
+
+            Chart2.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '高度',
+                    type: 'line',
+                    data: height,
+                    stack: '值'
+                }]
+            });
+
+            Chart4.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '重量',
+                    type: 'line',
+                    data: weight,
+                    stack: '值'
+                }]
+            });
+
+            Chart3.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart5.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Chart6.setOption({
+                xAxis: {
+                    data: id
+                },
+                series: [{
+                    name: '宽度',
+                    type: 'line',
+                    data: width,
+                    stack: '值'
+                }]
+            });
+
+            Colchart.setOption({
+                series: [{
+                    data: stationData,
+                    type: 'bar'
+                }]
+            });
+
+            timeChart.setOption(timeChartoption);
         }
 
-        var DataType = 0; //0: length, 1: width, 2: height, 3: weight
+        var HighPress = 0;
+        var LowPress = 0;
+        var AveragePress = 0;
 
-        var HigherCountHeight = 0;
-        var LowerCountHeight = 0;
-        var HighestHeight = 17;
-        var AverageHeight = 16.5;
-        var LowestHeight = 16;
-
-        var HigherCountLength = 0;
-        var LowerCountLength = 0;
-        var HighestLength = 17;
-        var AverageLength = 16.5;
-        var LowestLength = 16;
-
-        var HigherCountWidth = 0;
-        var LowerCountWidth = 0;
-        var HighestWidth = 17;
-        var AverageWidth = 16.5;
-        var LowestWidth = 16;
-
-        var HigherCountWeight = 0;
-        var LowerCountWeight = 0;
-        var HighestWeight = 17;
-        var AverageWeight = 16.5;
-        var LowestWeight = 16;
+        var HighTight = 0;
+        var LowTight = 0;
+        var AverageTight = 0;
 
         function judge() {
             //监测长度时执行
-
             if (length[length.length - 1] > HighestLength) {
                 HigherCountLength++;
                 let position = document.getElementById('warningLog1');
@@ -760,171 +1072,56 @@
                 temp.innerText = warningText;
                 position.appendChild(temp);
             }
-
-            //监测高度时执行
-
-            if (height[height.length - 1] > HighestHeight) {
-                HigherCountHeight++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现严重危险：height值：" + height[height.length - 1] + " 大于最大阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (height[height.length - 1] < LowestHeight) {
-                LowerCountHeight++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现严重危险：height值：" + height[height.length - 1] + " 低于最小阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (height[height.length - 1] >= AverageHeight && height[height.length - 1] <= HighestHeight) {
-                HigherCountHeight++;
-                LowerCountHeight = 0;
-            } else if (height[height.length - 1] < AverageHeight && height[height.length - 1] >= LowestHeight) {
-                HigherCountHeight = 0;
-                LowerCountHeight++;
-            }
-
-            if (HigherCountHeight >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现潜在危险：height值连续" + HigherCountHeight + "次高于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (LowerCountHeight >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现潜在危险：height值连续" + LowerCountHeight + "次低于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            }
-
-            //监测重量时执行
-
-            if (weight[weight.length - 1] > HighestWeight) {
-                HigherCountWeight++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现严重危险：weight值：" + weight[weight.length - 1] + " 大于最大阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (weight[weight.length - 1] < LowestWeight) {
-                LowerCountWeight++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现严重危险：weight值：" + weight[weight.length - 1] + " 低于最小阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (weight[weight.length - 1] >= AverageWeight && weight[weight.length - 1] <= HighestWeight) {
-                HigherCountHeight++;
-                LowerCountWeight = 0;
-            } else if (weight[weight.length - 1] < AverageWeight && weight[weight.length - 1] >= LowestWeight) {
-                HigherCountWeight = 0;
-                LowerCountWeight++;
-            }
-
-            if (HigherCountWeight >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现潜在危险：weight值连续" + HigherCountWeight + "次高于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (LowerCountWeight >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
-                var now = new Date();
-                let warningText = now + "产线出现潜在危险：weight值连续" + LowerCountWeight + "次低于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            }
-
         }
 
-        $("#watch_type").change(function () {
-            var res = $(this).children("option:selected").val();
-            switch (res) {
-                case "长度":
-                    DataType = 0;
-                    break;
-                case "宽度":
-                    DataType = 1;
-                    break;
-                case "高度":
-                    DataType = 2;
-                    break;
-                case "重量":
-                    DataType = 3;
-                    break;
-            }
-        });
+        function ChangePress() {
+            pressFlag = 1;
+            LowestLength = Number(document.getElementById('Plow').value);
+            HighestLength = Number(document.getElementById('Phigh').value);
+        }
 
-        function ChangeInformation() {
-            switch (DataType) {
-                case 0:
-                    LowestLength = Number(document.getElementById('low').value);
-                    HighestLength = Number(document.getElementById('high').value);
-                    AverageLength = Number(document.getElementById('average').value);
-                    break;
-                case 1:
-                    LowestWidth = Number(document.getElementById('low').value);
-                    HighestWidth = Number(document.getElementById('high').value);
-                    AverageWidth = Number(document.getElementById('average').value);
-                    break;
-                case 2:
-                    LowestHeight = Number(document.getElementById('low').value);
-                    HighestHeight = Number(document.getElementById('high').value);
-                    AverageHeight = Number(document.getElementById('average').value);
-                    break;
-                case 3:
-                    LowestWeight = Number(document.getElementById('low').value);
-                    HighestWeight = Number(document.getElementById('high').value);
-                    AverageWeight = Number(document.getElementById('average').value);
-                    break;
-            }
+        function ChangeTight() {
+            tightFlag = 1;
+            LowestLength = Number(document.getElementById('Tlow').value);
+            HighestLength = Number(document.getElementById('Thigh').value);
         }
 
         function Reset() {
-            switch (DataType) {
-                case 0:
-                    HighestLength = 17;
-                    AverageLength = 16.5;
-                    LowestLength = 16;
-                    break;
-                case 1:
-                    HighestWidth = 17;
-                    AverageWidth = 16.5;
-                    LowestWidth = 16;
-                    break;
-                case 2:
-                    HighestHeight = 17;
-                    AverageHeight = 16.5;
-                    LowestHeight = 16;
-                    break;
-                case 3:
-                    HighestWeight = 17;
-                    AverageWeight = 16.5;
-                    LowestWeight = 16;
-                    break;
-            }
-            document.getElementById('low').value = "";
-            document.getElementById('high').value = "";
-            document.getElementById('average').value = "";
+            document.getElementById('Plow').value = "";
+            document.getElementById('Phigh').value = "";
+            document.getElementById('Thigh').value = "";
+            document.getElementById('Tlow').value = "";
         }
 
-        function effCalc(a, b) {
-            let value = a * height[height.length - 1] + b;
-            let div = $('#eMessage');
-            //let now = new Date();
-            div.text(value);
-        }
-
+        var timeChartoption = {
+            title: {
+                text: '产品-耗时统计结果图',
+                subtext: '测试版',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '耗时',
+                    type: 'pie',
+                    radius: '50%',
+                    data: pieData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
 
         var ColChartoption = {
             title: {
@@ -940,7 +1137,7 @@
                 type: 'value'
             },
             series: [{
-                data: stastionData,
+                data: stationData,
                 type: 'bar',
                 showBackground: true,
                 backgroundStyle: {
@@ -951,107 +1148,13 @@
 
         var Chart1option = {
             title: {
-                text: '工位一扭矩'
+                text: '040工位扭矩偏移量'
             },
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    name: '1',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [120, 132, 101, 134, 90, 230, 210]
-                },
-                {
-                    name: '2',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [220, 182, 191, 234, 290, 330, 310]
-                },
-                {
-                    name: '3',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [150, 232, 201, 154, 190, 330, 410]
-                },
-                {
-                    name: '4',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [320, 332, 301, 334, 390, 330, 320]
-                },
-                {
-                    name: '5',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [820, 932, 901, 934, 1290, 1330, 1320]
-                },
-                {
-                    name: '6',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [320, 332, 301, 34, 390, 30, 320]
-                },
-                {
-                    name: '7',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [30, 332, 301, 334, 390, 330, 320]
-                },
-                {
-                    name: '8',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [320, 332, 301, 34, 390, 330, 30]
-                },
-                {
-                    name: '9',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [320, 332, 301, 334, 390, 330, 430]
-                },
-                {
-                    name: '10',
-                    type: 'line',
-                    stack: '扭矩',
-                    data: [320, 332, 31, 334, 30, 330, 20]
-                }
-
-            ]
-        }
-
-        var Chart2option = {
-            title: {
-                text: '高度监测'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['高度']
+                data: ['偏移量']
             },
             grid: {
                 left: '3%',
@@ -1066,12 +1169,47 @@
                 data: id
             },
             yAxis: {
-                name: 'value',
+                name: '偏移量',
                 type: 'value',
                 boundaryGap: [0, '50%'],
             },
             series: [{
-                name: '高度',
+                name: '偏移量',
+                type: 'line',
+                data: height,
+                stack: '值'
+            }]
+        }
+
+        var Chart2option = {
+            title: {
+                text: '070工位扭矩偏移量'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['偏移量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                name: 'id',
+                type: 'category',
+                boundaryGap: false,
+                data: id
+            },
+            yAxis: {
+                name: '偏移量',
+                type: 'value',
+                boundaryGap: [0, '50%'],
+            },
+            series: [{
+                name: '偏移量',
                 type: 'line',
                 data: height,
                 stack: '值'
@@ -1080,13 +1218,13 @@
 
         var Chart3option = {
             title: {
-                text: '宽度监测'
+                text: '伺服压机工位压力偏移量'
             },
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data: ['宽度']
+                data: ['偏移量']
             },
             grid: {
                 left: '3%',
@@ -1101,12 +1239,12 @@
                 data: id
             },
             yAxis: {
-                name: 'value',
+                name: '偏移量',
                 type: 'value',
                 boundaryGap: [0, '50%'],
             },
             series: [{
-                name: '宽度',
+                name: '偏移量',
                 type: 'line',
                 data: width,
                 stack: '值'
@@ -1115,13 +1253,13 @@
 
         var Chart4option = {
             title: {
-                text: '重量监测'
+                text: '伺服压机工位位移值'
             },
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data: ['重量']
+                data: ['位移值']
             },
             grid: {
                 left: '3%',
@@ -1136,13 +1274,13 @@
                 data: id
             },
             yAxis: {
-                name: 'value',
+                name: '位移值',
                 type: 'value',
                 boundaryGap: [0, '50%'],
 
             },
             series: [{
-                name: '重量',
+                name: '位移值',
                 type: 'line',
                 data: weight,
                 stack: '值'
@@ -1151,13 +1289,13 @@
 
         var Chart5option = {
             title: {
-                text: '重量监测'
+                text: '液压机工位压力偏移量'
             },
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data: ['重量']
+                data: ['偏移量']
             },
             grid: {
                 left: '3%',
@@ -1172,13 +1310,13 @@
                 data: id
             },
             yAxis: {
-                name: 'value',
+                name: '偏移量',
                 type: 'value',
                 boundaryGap: [0, '50%'],
 
             },
             series: [{
-                name: '重量',
+                name: '偏移量',
                 type: 'line',
                 data: weight,
                 stack: '值'
@@ -1187,13 +1325,13 @@
 
         var Chart6option = {
             title: {
-                text: '重量监测'
+                text: '液压机工位位移值'
             },
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data: ['重量']
+                data: ['位移值']
             },
             grid: {
                 left: '3%',
@@ -1208,121 +1346,13 @@
                 data: id
             },
             yAxis: {
-                name: 'value',
+                name: '位移值',
                 type: 'value',
                 boundaryGap: [0, '50%'],
 
             },
             series: [{
-                name: '重量',
-                type: 'line',
-                data: weight,
-                stack: '值'
-            }]
-        }
-
-        var Chart7option = {
-            title: {
-                text: '重量监测'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['重量']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                name: 'id',
-                type: 'category',
-                boundaryGap: false,
-                data: id
-            },
-            yAxis: {
-                name: 'value',
-                type: 'value',
-                boundaryGap: [0, '50%'],
-
-            },
-            series: [{
-                name: '重量',
-                type: 'line',
-                data: weight,
-                stack: '值'
-            }]
-        }
-
-        var Chart8option = {
-            title: {
-                text: '重量监测'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['重量']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                name: 'id',
-                type: 'category',
-                boundaryGap: false,
-                data: id
-            },
-            yAxis: {
-                name: 'value',
-                type: 'value',
-                boundaryGap: [0, '50%'],
-
-            },
-            series: [{
-                name: '重量',
-                type: 'line',
-                data: weight,
-                stack: '值'
-            }]
-        }
-
-        var Chart9option = {
-            title: {
-                text: '重量监测'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['重量']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                name: 'id',
-                type: 'category',
-                boundaryGap: false,
-                data: id
-            },
-            yAxis: {
-                name: 'value',
-                type: 'value',
-                boundaryGap: [0, '50%'],
-
-            },
-            series: [{
-                name: '重量',
+                name: '位移值',
                 type: 'line',
                 data: weight,
                 stack: '值'
@@ -1331,118 +1361,16 @@
 
 
         setInterval(function () {
+            var tempid = -1;
+            $.getJSON("http://localhost:8080/sample1", function (json_data) {
+                tempid = Number(json_data[0]['id']);
+            });
+            if (tempid == id[id.length - 1])
+                return;
+            stateWatch();
+            productJudge();
             getData();
-            if (id[id.length - 1] == id[id.length - 2])
-                return
             judge();
-            effCalc(2, 3);
-            Chart1.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '长度',
-                    type: 'line',
-                    data: length,
-                    stack: '值'
-                }]
-            });
-
-            Chart2.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '高度',
-                    type: 'line',
-                    data: height,
-                    stack: '值'
-                }]
-            });
-
-            Chart4.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '重量',
-                    type: 'line',
-                    data: weight,
-                    stack: '值'
-                }]
-            });
-
-            Chart3.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Chart5.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Chart6.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Chart7.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Chart8.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Chart9.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
         }, 1000);
 
         var Chart1 = echarts.init(document.getElementById('chart1'), 'wonderland');
@@ -1463,17 +1391,11 @@
         var Chart6 = echarts.init(document.getElementById('chart6'), 'wonderland');
         Chart6.setOption(Chart6option);
 
-        var Chart7 = echarts.init(document.getElementById('chart7'), 'wonderland');
-        Chart7.setOption(Chart7option);
-
-        var Chart8 = echarts.init(document.getElementById('chart8'), 'wonderland');
-        Chart8.setOption(Chart8option);
-
-        // var Chart9 = echarts.init(document.getElementById('chart9'), 'wonderland');
-        // Chart9.setOption(Chart9option);
-
         var Colchart = echarts.init(document.getElementById('ColChart'));
         Colchart.setOption(ColChartoption);
+
+        var timeChart = echarts.init(document.getElementById('timeChart'));
+        timeChart.setOption(timeChartoption);
 
     </script>
 </body>
