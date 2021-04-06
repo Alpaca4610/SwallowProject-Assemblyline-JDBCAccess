@@ -637,11 +637,14 @@
             ],
             id = [],
             productID = [];
-
         var station_status = Array(11).fill(0);//工位状态监控
+        var station_isread = Array(11).fill(2);
         var sp_status = Array(16).fill(0);//0代表产线未运行，1代表产线正常运行，2代表产线出现错误
-        var sc_status = Array(16).fill(0);//0代表产线未运行，1代表产线正常运行，2代表产线出现错误
-        var PLCstatus = 0;//0代表产线未运行，1代表产线正常运行，2代表产线出现错误
+        var sp_isread = Array(16).fill(2);//0未读，1已读，2为初始状态
+        var sc_status = Array(16).fill(0);
+        var sc_isread = Array(16).fill(2);
+        var PLCstatus = { status: 0, isread: 2 };
+        productCount = 0;
 
         function statusBtn() {
             for (var i = 1; i <= 7; i++) {
@@ -651,6 +654,14 @@
             $("#tab_btn_5").attr("class", "active");
             $("#tab5").attr("class", "tab-pane active");
             $("#statusWatch").attr("class", "btn btn-default");
+            PLCstatus.isread = 1;
+            for (var i = 1; i <= 10; i++) {
+                station_isread[i] = 1;
+            }
+            for (var i = 0; i < 16; i++) {
+                sc_isread[i] = 1;
+                sp_isread[i] = 1;
+            }
         }
 
         function warningBtn() {
@@ -665,15 +676,18 @@
 
         function stateWatch() {
             var stateUrl = "http://localhost:8080/states"
+
             $.getJSON(stateUrl, function (json_data) {
                 if (json_data['PLC_station_running'] == "1") {
-                    PLCstatus = 1;
+                    PLCstatus.status = 1;
+
                 }
                 if (json_data["PLC_station_stop"] == "1") {
-                    PLCstatus = 0;
+                    PLCstatus.status = 0;
+
                 }
                 if (json_data["PLC_station_error"] == "1") {
-                    PLCstatus = 2;
+                    PLCstatus.status = 2;
                 }
 
                 for (var i = 1; i <= 10; i++) {
@@ -702,70 +716,104 @@
             });
 
 
+            //工位状态监控
             for (var i = 1; i <= 10; i++) {
                 if (station_status[i] == 2) {
+                    if (station_isread[i] == 2) {
+                        station_isread[i] = 0;
+                    }
+
                     $("#status-1-" + String(i)).attr("style", "background-color:lightcoral;");
-                    $("#statusWatch").attr('class', 'btn btn-danger');
+                    if (station_isread[i] == 0) {
+                        $("#statusWatch").attr('class', 'btn btn-danger');
+                    }
                 }
+
                 else if (station_status[i] == 1) {
                     $("#status-1-" + String(i)).attr("style", "background-color:lightgreen;");
+                    station_isread[i] = 2;
                 }
                 else {
                     $("#status-1-" + String(i)).removeAttr("style");
+                    station_isread[i] = 2;
                 }
             }
 
+            //sc、sp状态监控
             for (var i = 0; i < 16; i++) {
                 if (sc_status[i] == 2) {
+                    if (sc_isread[i] == 2) {
+                        sc_isread[i] = 0;
+                    }
+
                     $("#status-2-" + String(i)).attr("style", "background-color:lightcoral;");
-                    $("#statusWatch").attr('class', 'btn btn-danger');
+                    if (sc_isread[i] == 0) {
+                        $("#statusWatch").attr('class', 'btn btn-danger');
+                    }
                 }
                 else if (sc_status[i] == 1) {
                     $("#status-2-" + String(i)).attr("style", "background-color:lightgreen;");
+                    sc_isread[i] = 2;
                 }
                 else {
                     $("#status-2-" + String(i)).removeAttr("style");
+                    sc_isread[i] = 2;
                 }
 
                 if (sp_status[i] == 2) {
+                    if (sp_isread[i] == 2) {
+                        sp_isread[i] = 0;
+                    }
                     $("#status-3-" + String(i)).attr("style", "background-color:lightcoral;");
-                    $("#statusWatch").attr('class', 'btn btn-danger');
+                    if (sp_isread[i] == 0) {
+                        $("#statusWatch").attr('class', 'btn btn-danger');
+                    }
                 }
                 else if (sp_status[i] == 1) {
                     $("#status-3-" + String(i)).attr("style", "background-color:lightgreen;");
+                    sp_isread[i] = 2;
                 }
                 else {
                     $("#status-3-" + String(i)).removeAttr("style");
+                    sp_isread[i] = 2;
                 }
             }
 
-            if (PLCstatus == 1) {
+            //PLC状态
+            if (PLCstatus.status == 1) {
                 $("#light-running").attr("style", "background-color:lightgreen");
+                PLCstatus.isread = 2;
             }
             else {
                 $("#light-running").removeAttr("style");
             }
-            if (PLCstatus == 0) {
+            if (PLCstatus.status == 0) {
                 $("#light-stop").attr("style", "background-color:gray");
+                PLCstatus.isread = 2;
             }
             else {
                 $("#light-stop").removeAttr("style");
             }
-            if (PLCstatus == 2) {
+            if (PLCstatus.status == 2) {
+                if (PLCstatus.isread == 2) {
+                    PLCstatus.isread = 0;
+                }
                 $("#light-warning").attr("style", "background-color:lightcoral");
-                $("#statusWatch").attr('class', 'btn btn-danger');
+                if (PLCstatus.isread == 0) {
+                    $("#statusWatch").attr('class', 'btn btn-danger');
+                }
             }
             else {
                 $("#light-warning").removeAttr("style");
             }
         }
 
-        function toPercent(point){
-            if (point==0) {
+        function toPercent(point) {
+            if (point == 0) {
                 return 0;
             }
-            var str=Number(point*100).toFixed();
-            str+="%";
+            var str = Number(point * 100).toFixed();
+            str += "%";
             return str;
         }
 
@@ -798,32 +846,32 @@
                     stationBypass[8] = json_data['line1_station8_bypass'];
                     stationStatus[10] = json_data['line1_station10_product_OK'];
                     stationBypass[10] = json_data['line1_station10_bypass'];
-                   
+
                 })
                 productString = nowtime + "产品" + productID + "质量不合格，问题工位为：";
-                    if (!stationBypass[2] && !stationStatus[2]) {
-                        productString += "<span class=\"label label-danger\">OP010SA</span> ";
-                    }
-                    if (!stationBypass[3] && !stationStatus[3]) {
-                        productString += "<span class=\"label label-danger\">OP020SA</span> ";
-                    }
-                    if (!stationBypass[4] && !stationStatus[4]) {
-                        productString += "<span class=\"label label-danger\">OP030SA</span> ";
-                    }
-                    if (!stationBypass[5] && !stationStatus[5]) {
-                        productString += "<span class=\"label label-danger\">OP040A</span> ";
-                    }
-                    if (!stationBypass[7] && !stationStatus[7]) {
-                        productString += "<span class=\"label label-danger\">OP060M</span> ";
-                    }
-                    if (!stationBypass[8] && !stationStatus[8]) {
-                        productString += "<span class=\"label label-danger\">OP070A</span> ";
-                    }
-                    if (!stationBypass[10] && !stationStatus[10]) {
-                        productString += "<span class=\"label label-danger\">OP80A</span> ";
-                    }
+                if (!stationBypass[2] && !stationStatus[2]) {
+                    productString += "<span class=\"label label-danger\">OP010SA</span> ";
+                }
+                if (!stationBypass[3] && !stationStatus[3]) {
+                    productString += "<span class=\"label label-danger\">OP020SA</span> ";
+                }
+                if (!stationBypass[4] && !stationStatus[4]) {
+                    productString += "<span class=\"label label-danger\">OP030SA</span> ";
+                }
+                if (!stationBypass[5] && !stationStatus[5]) {
+                    productString += "<span class=\"label label-danger\">OP040A</span> ";
+                }
+                if (!stationBypass[7] && !stationStatus[7]) {
+                    productString += "<span class=\"label label-danger\">OP060M</span> ";
+                }
+                if (!stationBypass[8] && !stationStatus[8]) {
+                    productString += "<span class=\"label label-danger\">OP070A</span> ";
+                }
+                if (!stationBypass[10] && !stationStatus[10]) {
+                    productString += "<span class=\"label label-danger\">OP80A</span> ";
+                }
             }
-            
+
             else {
                 productString = nowtime + "产品" + productID + "质量合格";
             }
@@ -833,6 +881,7 @@
             });
 
             $('#productWatch').append("<p>" + productString + "</p>");
+            productCount++;
             // $('#sumofFinishedP').text(FinishedPSum);
             // $('#sumofPassedP').text(PassedPSum);
         }
@@ -890,12 +939,12 @@
                 $("#bottlenID").text(Number(json_data['Neck']) + "号 当前产品id为" + Number(json_data['id']));
             });
 
-            $.getJSON(numOfProductUrl,function(json_data){
+            $.getJSON(numOfProductUrl, function (json_data) {
                 $('sumofFinishedP').text(json_data['qualified']);
                 $('sumofPassedP').text(json_data['finished']);
                 $('passRate').text(toPercent(Number(json_data['qualified_persentage'])));
             });
-            
+
             Chart1.setOption({
                 xAxis: {
                     data: id
