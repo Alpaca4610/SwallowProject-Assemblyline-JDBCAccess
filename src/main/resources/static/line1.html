@@ -617,6 +617,7 @@
     </div>
 
     <script>
+        var tempid = -1;
         var length = [],
             width = [],
             height = [],
@@ -812,7 +813,7 @@
             if (point == 0) {
                 return 0;
             }
-            var str = Number(point * 100).toFixed();
+            var str = Number(point * 100).toFixed(2);
             str += "%";
             return str;
         }
@@ -914,8 +915,10 @@
             });
 
             $.getJSON(KPIUrl, function (json_data) {
-                KPIstring = "编号" + json_data[0]['pid'] + "    上线时间：" + json_data[0]['oy'] + "-" + json_data[0]['omon'] + "-" + json_data[0]['od'] + "  " + json_data[0]['oh'] + ":" + json_data[0]['omin'] + ":" + json_data[0]['osec'] + "    下线时间：" + json_data[0]['ofy'] + "-" + json_data[0]['ofmon'] + "-" + json_data[0]['ofd'] + "  " + json_data[0]['ofh'] + ":" + json_data[0]['ofmin'] + ":" + json_data[0]['ofsec'] + "    制作时间：" + json_data['time_consume'] + "秒";
+                KPIstring = "编号" + json_data[0]['pid'] + "    上线时间：" + json_data[0]['oy'] + "-" + json_data[0]['omon'] + "-" + json_data[0]['od'] + "  " + json_data[0]['oh'] + ":" + json_data[0]['omin'] + ":" + json_data[0]['osec'] + "    下线时间：" + json_data[0]['ofy'] + "-" + json_data[0]['ofmon'] + "-" + json_data[0]['ofday'] + "  " + json_data[0]['ofhour'] + ":" + json_data[0]['ofmin'] + ":" + json_data[0]['ofsec'] + "    制作时间：" + json_data[0]['time_consume'] + "秒";
                 $('#KPI').append("<p>" + KPIstring + "</P>");
+                $('#tightRate').text(toPercent(Number(json_data[2]['screw_percent'])));
+                $('#pressRate').text(toPercent(Number(json_data[1]['press_percent'])));
             });
 
             $.getJSON(station, function (json_data) {
@@ -957,9 +960,9 @@
             });
 
             $.getJSON(numOfProductUrl, function (json_data) {
-                $('sumofFinishedP').text(json_data[1]['qualified']);
-                $('sumofPassedP').text(json_data[1]['finished']);
-                $('passRate').text(toPercent(Number(json_data[1]['qualified_persentage'])));
+                $('#sumofFinishedP').text(json_data['qualified']);
+                $('#sumofPassedP').text(json_data['finished']);
+                $('#passRate').text(toPercent(Number(json_data['qualified_persentage'])));
             });
 
             Chart1.setOption({
@@ -1430,7 +1433,6 @@
 
         setInterval(function () {
             stateWatch();
-            var tempid = -1;
             $.getJSON("http://localhost:8080/sample1", function (json_data) {
                 tempid = Number(json_data[0]['id']);
             });
