@@ -561,12 +561,12 @@
                                 </div>
                                 <p style="text-align: center;margin-top: 30px;">
                                     <button class="btn btn-primary" type="button">
-                                        完成产品数 <span class="badge" id="sumofFinishedP">0</span>
+                                        完成产品数 <span class="badge" id="sumofFinishedP">0</span> 个
                                     </button>
                                 </p>
                                 <p style="text-align: center;">
                                     <button class="btn btn-primary" type="button">
-                                        合格产品数 <span class="badge" id="sumofPassedP">0</span>
+                                        合格产品数 <span class="badge" id="sumofPassedP">0</span> 个
                                     </button>
                                 </p>
                                 <p style="text-align: center;">
@@ -620,8 +620,8 @@
         var length = [],
             width = [],
             height = [],
-            weight = [],
-            bottleneck = 0,
+            weight = [];
+        bottleneck = 0,
             stationData = Array(7).fill(0),
             pieData = [
                 { value: 0, name: '0～10s' },
@@ -644,7 +644,7 @@
         var sc_status = Array(16).fill(0);
         var sc_isread = Array(16).fill(2);
         var PLCstatus = { status: 0, isread: 2 };
-        productCount = 0;
+
 
         function statusBtn() {
             for (var i = 1; i <= 7; i++) {
@@ -846,44 +846,36 @@
                     stationBypass[8] = json_data['line1_station8_bypass'];
                     stationStatus[10] = json_data['line1_station10_product_OK'];
                     stationBypass[10] = json_data['line1_station10_bypass'];
-
+                    productString = nowtime + "产品" + productID + "质量不合格，问题工位为：";
+                    if (!stationBypass[2] && !stationStatus[2]) {
+                        productString += "<span class=\"label label-danger\">OP010SA</span> ";
+                    }
+                    if (!stationBypass[3] && !stationStatus[3]) {
+                        productString += "<span class=\"label label-danger\">OP020SA</span> ";
+                    }
+                    if (!stationBypass[4] && !stationStatus[4]) {
+                        productString += "<span class=\"label label-danger\">OP030SA</span> ";
+                    }
+                    if (!stationBypass[5] && !stationStatus[5]) {
+                        productString += "<span class=\"label label-danger\">OP040A</span> ";
+                    }
+                    if (!stationBypass[7] && !stationStatus[7]) {
+                        productString += "<span class=\"label label-danger\">OP060M</span> ";
+                    }
+                    if (!stationBypass[8] && !stationStatus[8]) {
+                        productString += "<span class=\"label label-danger\">OP070A</span> ";
+                    }
+                    if (!stationBypass[10] && !stationStatus[10]) {
+                        productString += "<span class=\"label label-danger\">OP80A</span> ";
+                    }
+                    $('#productWatch').append("<p>" + productString + "</p>");
                 })
-                productString = nowtime + "产品" + productID + "质量不合格，问题工位为：";
-                if (!stationBypass[2] && !stationStatus[2]) {
-                    productString += "<span class=\"label label-danger\">OP010SA</span> ";
-                }
-                if (!stationBypass[3] && !stationStatus[3]) {
-                    productString += "<span class=\"label label-danger\">OP020SA</span> ";
-                }
-                if (!stationBypass[4] && !stationStatus[4]) {
-                    productString += "<span class=\"label label-danger\">OP030SA</span> ";
-                }
-                if (!stationBypass[5] && !stationStatus[5]) {
-                    productString += "<span class=\"label label-danger\">OP040A</span> ";
-                }
-                if (!stationBypass[7] && !stationStatus[7]) {
-                    productString += "<span class=\"label label-danger\">OP060M</span> ";
-                }
-                if (!stationBypass[8] && !stationStatus[8]) {
-                    productString += "<span class=\"label label-danger\">OP070A</span> ";
-                }
-                if (!stationBypass[10] && !stationStatus[10]) {
-                    productString += "<span class=\"label label-danger\">OP80A</span> ";
-                }
-            }
 
+            }
             else {
                 productString = nowtime + "产品" + productID + "质量合格";
+                $('#productWatch').append("<p>" + productString + "</p>");
             }
-
-            $.ajax("http://localhost:8080/get?qualified=19", {
-                method: 'GET'
-            });
-
-            $('#productWatch').append("<p>" + productString + "</p>");
-            productCount++;
-            // $('#sumofFinishedP').text(FinishedPSum);
-            // $('#sumofPassedP').text(PassedPSum);
         }
 
         function getData() {
@@ -922,12 +914,13 @@
             });
 
             $.getJSON(KPIUrl, function (json_data) {
-                KPIstring = "编号" + json_data['pid'] + "    上线时间：" + json_data['oy'] + "-" + json_data['omon'] + "-" + json_data['od'] + "  " + json_data['oh'] + ":" + json_data['omin'] + ":" + json_data['osec'] + "    下线时间：" + json_data['ofy'] + "-" + json_data['ofmon'] + "-" + json_data['ofd'] + "  " + json_data['ofh'] + ":" + json_data['ofmin'] + ":" + json_data['ofsec'] + "    制作时间：" + json_data['time_consume'];
+                KPIstring = "编号" + json_data[0]['pid'] + "    上线时间：" + json_data[0]['oy'] + "-" + json_data[0]['omon'] + "-" + json_data[0]['od'] + "  " + json_data[0]['oh'] + ":" + json_data[0]['omin'] + ":" + json_data[0]['osec'] + "    下线时间：" + json_data[0]['ofy'] + "-" + json_data[0]['ofmon'] + "-" + json_data[0]['ofd'] + "  " + json_data[0]['ofh'] + ":" + json_data[0]['ofmin'] + ":" + json_data[0]['ofsec'] + "    制作时间：" + json_data['time_consume'] + "秒";
                 $('#KPI').append("<p>" + KPIstring + "</P>");
             });
 
             $.getJSON(station, function (json_data) {
                 //获取瓶颈工位耗时
+                let temp = "";
                 Colchart.hideLoading();
                 stationData[0] = Number(json_data['line1_station2_product_time']);
                 stationData[1] = Number(json_data['line1_station3_product_time']);
@@ -936,13 +929,37 @@
                 stationData[4] = Number(json_data['line1_station7_product_time']);
                 stationData[5] = Number(json_data['line1_station8_product_time']);
                 stationData[6] = Number(json_data['line1_station10_product_time']);
+                switch (Number(json_data['Neck'])) {
+                    case 2:
+                        temp = "OP010SA"
+                        break;
+                    case 3:
+                        temp = "OP020SA"
+                        break;
+                    case 4:
+                        temp = "OP030SA"
+                        break;
+                    case 5:
+                        temp = "OP040A"
+                        break;
+                    case 7:
+                        temp = "OP060M"
+                        break;
+                    case 8:
+                        temp = "OP070A"
+                        break;
+                    case 10:
+                        temp = "OP80A"
+                        break;
+
+                }
                 $("#bottlenID").text(Number(json_data['Neck']) + "号 当前产品id为" + Number(json_data['id']));
             });
 
             $.getJSON(numOfProductUrl, function (json_data) {
-                $('sumofFinishedP').text(json_data['qualified']);
-                $('sumofPassedP').text(json_data['finished']);
-                $('passRate').text(toPercent(Number(json_data['qualified_persentage'])));
+                $('sumofFinishedP').text(json_data[1]['qualified']);
+                $('sumofPassedP').text(json_data[1]['finished']);
+                $('passRate').text(toPercent(Number(json_data[1]['qualified_persentage'])));
             });
 
             Chart1.setOption({
