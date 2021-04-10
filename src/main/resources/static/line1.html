@@ -252,7 +252,7 @@
                     </li>
                     <li id="tab_btn_4"><a href="#tab4" data-toggle="tab">报警页面</a>
                     </li>
-                    <li id="tab_btn_5"><a href="#tab5" data-toggle="tab">状态监控</a>
+                    <li id="tab_btn_5"><a href="#tab5" data-toggle="tab" onclick="statusBtn()">状态监控</a>
                     </li>
                     <li id="tab_btn_6"><a href="#tab6" data-toggle="tab">指标监控</a>
                     </li>
@@ -294,13 +294,13 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
                                     <button type="button" class="btn btn-success" id="cboxA"
-                                        style="margin-left: 14.5%;margin-top: 1%;">压装1</button>
+                                        style="margin-left: 14.5%;margin-top: 1%;">OP010SA压力</button>
                                     <button type="button" class="btn btn-success" id="cboxB"
-                                        style="margin-left: 14.5%;margin-top: 1%;">压装2</button>
+                                        style="margin-left: 14.5%;margin-top: 1%;">OP010SA位移</button>
                                     <button type="button" class="btn btn-warning" id="cboxC"
-                                        style="margin-left: 14.5%;margin-top: 1%;">压装3</button>
+                                        style="margin-left: 14.5%;margin-top: 1%;">OP020SA压力</button>
                                     <button type="button" class="btn btn-warning" id="cboxD"
-                                        style="margin-left: 14.5%;margin-top: 1%;">压装4</button>
+                                        style="margin-left: 14.5%;margin-top: 1%;">OP020SA位移</button>
                                 </div>
                                 <div id="chart3" class="col-md-6"></div>
                                 <div id="chart4" class="col-md-6"></div>
@@ -546,15 +546,8 @@
                     </div>
 
                     <div class="tab-pane active" id="tab6">
-                        <div class="col-md-6">
-                            <div class="panel panel-primary" style="text-align:center;margin-top: 50px;height: 300px;">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">产品-耗时统计结果图</h3>
-                                </div>
-                                <div id="timeChart" style="height: 300px;"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+
+                        <div class="col-md-12">
                             <div class="panel panel-primary" style="text-align:center;margin-top: 50px;height: 300px;">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">统计结果展示</h3>
@@ -584,11 +577,48 @@
                                         压装合格率 <span class="badge" id="pressRate">0</span>
                                     </button>
                                 </p>
-
                             </div>
+                        </div>
 
+                        <div class="col-md-6">
+                            <div class="panel panel-primary" style="text-align:center;height: 300px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">产品-耗时统计结果图</h3>
+                                </div>
+                                <div id="timeChart" style="height: 300px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="panel panel-primary" style="text-align:center;height: 300px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">产品-耗时统计结果图</h3>
+                                </div>
+                                <div id="timeChart" style="height: 300px;"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="panel panel-primary" style="text-align:center;height: 300px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">产品-耗时统计结果图</h3>
+                                </div>
+                                <div id="timeChart" style="height: 300px;"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="panel panel-primary" style="text-align:center;height: 300px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">产品-耗时统计结果图</h3>
+                                </div>
+                                <div id="timeChart" style="height: 300px;"></div>
+                            </div>
                         </div>
                     </div>
+
 
                     <div class="tab-pane active" id="tab7">
                         <div class="col-md-12">
@@ -616,13 +646,18 @@
         </div>
     </div>
 
+    
     <script>
-        var tempid = -1;
-        var length = [],
+        var tempid = -1,
+            length = [],
             width = [],
             height = [],
-            weight = [];
-        bottleneck = 0,
+            weight = [],
+            data040 = [],
+            data070 = [],
+            dis010 = [],
+            dis020 = [],
+            bottleneck = 0,
             stationData = Array(7).fill(0),
             pieData = [
                 { value: 0, name: '0～10s' },
@@ -885,26 +920,27 @@
             var timeUrl = "http://localhost:8080/recent50";
             var KPIUrl = "http://localhost:8080/kpi1";
             var numOfProductUrl = "http://localhost:8080/qualified"
+            var dataUrl = "http://localhost:8080/diversion";
             var KPIstring = "";
 
-            $.getJSON(url, function (json_data) {
+            $.getJSON(dataUrl, function (json_data) {
                 Chart1.hideLoading();
                 Chart2.hideLoading();
                 Chart3.hideLoading();
                 Chart4.hideLoading();
                 Colchart.hideLoading();
-                id.push(json_data[0]['id'])
-                length.push(json_data[0]['length']);
-                width.push(json_data[0]['width']);
-                height.push(json_data[0]['height']);
-                weight.push(json_data[0]['weight']);
+                id.push(json_data[0]['id']);
+                data040.push(json_data[0]['avg_torque_diversion040']);
+                data070.push(json_data[0]['avg_torque_diversion070']);
+                dis010.push(json_data[1]['avg_010_dis']);
+                dis020.push(json_data[1]['avg_020_dis']);
 
                 if (id.length > 7) {
                     id.shift();
-                    length.shift();
-                    weight.shift();
-                    width.shift();
-                    height.shift();
+                    data040.shift();
+                    data070.shift();
+                    dis010.shift();
+                    dis020.shift();
                 }
             });
 
@@ -965,84 +1001,13 @@
                 $('#passRate').text(toPercent(Number(json_data['qualified_persentage'])));
             });
 
-            Chart1.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    type: 'line',
-                    data: height,
-                    stack: '值'
-                }]
-            });
-
-            Chart2.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '高度',
-                    type: 'line',
-                    data: height,
-                    stack: '值'
-                }]
-            });
-
-            Chart4.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '重量',
-                    type: 'line',
-                    data: weight,
-                    stack: '值'
-                }]
-            });
-
-            Chart3.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Chart5.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Chart6.setOption({
-                xAxis: {
-                    data: id
-                },
-                series: [{
-                    name: '宽度',
-                    type: 'line',
-                    data: width,
-                    stack: '值'
-                }]
-            });
-
-            Colchart.setOption({
-                series: [{
-                    data: stationData,
-                    type: 'bar'
-                }]
-            });
-
+            Chart1.setOption(Chart1option);
+            Chart2.setOption(Chart2option);
+            Chart3.setOption(Chart3option);
+            Chart4.setOption(Chart4option);
+            Chart5.setOption(Chart5option);
+            Chart6.setOption(Chart6option);
+            Colchart.setOption(ColChartoption);
             timeChart.setOption(timeChartoption);
         }
 
@@ -1247,7 +1212,7 @@
             series: [{
                 name: '偏移量',
                 type: 'line',
-                data: height,
+                data: data040,
                 stack: '值'
             }]
         }
@@ -1282,14 +1247,14 @@
             series: [{
                 name: '偏移量',
                 type: 'line',
-                data: height,
+                data: data070,
                 stack: '值'
             }]
         }
 
         var Chart3option = {
             title: {
-                text: '伺服压机工位压力偏移量'
+                text: 'OP010SA压力偏移量'
             },
             tooltip: {
                 trigger: 'axis'
@@ -1324,7 +1289,7 @@
 
         var Chart4option = {
             title: {
-                text: '伺服压机工位位移值'
+                text: 'OP010SA位移值'
             },
             tooltip: {
                 trigger: 'axis'
@@ -1353,14 +1318,14 @@
             series: [{
                 name: '位移值',
                 type: 'line',
-                data: weight,
+                data: dis010,
                 stack: '值'
             }]
         }
 
         var Chart5option = {
             title: {
-                text: '液压机工位压力偏移量'
+                text: 'OP020SA压力偏移量'
             },
             tooltip: {
                 trigger: 'axis'
@@ -1396,7 +1361,7 @@
 
         var Chart6option = {
             title: {
-                text: '液压机工位位移值'
+                text: 'OP020SA位移值'
             },
             tooltip: {
                 trigger: 'axis'
@@ -1425,7 +1390,7 @@
             series: [{
                 name: '位移值',
                 type: 'line',
-                data: weight,
+                data: dis020,
                 stack: '值'
             }]
         }
