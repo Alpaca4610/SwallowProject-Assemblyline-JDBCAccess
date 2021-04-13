@@ -45,22 +45,6 @@
             margin: 0 auto
         }
 
-        @media screen and (max-width: 1200px) and (min-width: 0px) {
-            div.row .col-sm-12 {
-                width: 100%;
-                height: 125px;
-                /* border: solid 2px black; */
-                float: left;
-            }
-
-            div.row .col-sm-6 {
-                width: 100%;
-                height: 364px;
-                /* border: solid 2px black; */
-                float: left;
-            }
-        }
-
         /* 以下为PC端自适应CSS */
         @media screen and (min-width: 1200px) {
             div.row .col-md-12 {
@@ -81,11 +65,12 @@
         var tightFlag = 0;
 
         $(function () {
-            getData();
             Chart1.showLoading();
             Chart2.showLoading();
             Chart3.showLoading();
             Chart4.showLoading();
+            Chart5.showLoading();
+            Chart6.showLoading();
             Colchart.showLoading();
             var cboxflag = [0, 0, 0, 0];
             var checkbox1 = $('#cboxA');
@@ -215,9 +200,10 @@
                     }
                 }
             })
+            getData();
         });
 
-        $(window).resize(function () {
+        function Resize() {
             Chart1.resize();
             Chart2.resize();
             Chart3.resize();
@@ -225,6 +211,11 @@
             Chart5.resize();
             Chart6.resize();
             Colchart.resize();
+            timeChart.resize();
+        }
+
+        $(window).resize(function () {
+            Resize();
         });
     </script>
 </head>
@@ -246,15 +237,15 @@
                 <ul class="nav nav-tabs" style="margin-bottom: 10px;">
                     <li class="active" id="tab_btn_1"><a href="#tab1" data-toggle="tab">拧紧参数监控</a>
                     </li>
-                    <li id="tab_btn_2"><a href="#tab2" data-toggle="tab">压装参数监控</a>
+                    <li id="tab_btn_2"><a href="#tab2" data-toggle="tab" onclick="Resize()">压装参数监控</a>
                     </li>
-                    <li id="tab_btn_3"><a href="#tab3" data-toggle="tab">瓶颈工位监控</a>
+                    <li id="tab_btn_3"><a href="#tab3" data-toggle="tab" onclick="Resize()">瓶颈工位监控</a>
                     </li>
-                    <li id="tab_btn_4"><a href="#tab4" data-toggle="tab">报警页面</a>
+                    <li id="tab_btn_4"><a href="#tab4" data-toggle="tab" onclick="Resize()">报警页面</a>
                     </li>
                     <li id="tab_btn_5"><a href="#tab5" data-toggle="tab" onclick="statusBtn()">状态监控</a>
                     </li>
-                    <li id="tab_btn_6"><a href="#tab6" data-toggle="tab">指标监控</a>
+                    <li id="tab_btn_6"><a href="#tab6" data-toggle="tab" onclick="Resize()">指标监控</a>
                     </li>
                     <li id="tab_btn_7"><a href="#tab7" data-toggle="tab">产品信息</a>
                     </li>
@@ -281,7 +272,7 @@
                                 </div>
                                 </p>
                                 <p style="text-align:center;">
-                                    <button type="button" class="btn btn-success" onclick="ChangePress()">提交</button>
+                                    <button type="button" class="btn btn-success" onclick="ChangeTight()">提交</button>
                                     <button type="button" onclick="Reset()" class="btn btn-warning">重置</button>
                                 </p>
                             </form>
@@ -289,7 +280,7 @@
                     </div>
 
 
-                    <div class="tab-pane active" id="tab2">
+                    <div class="tab-pane" id="tab2">
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
@@ -334,7 +325,7 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane active" id="tab3">
+                    <div class="tab-pane" id="tab3">
                         <div class="col-md-12 col-sm-12" id="neckbox">
                             <div id="ColChart" style="height: 300px;"></div>
                             <div class="alert alert-danger" role="alert" style="text-align: center;">
@@ -343,6 +334,7 @@
                         </div>
                     </div>
 
+                    <!-- todo：自动滚动 -->
                     <div class="tab-pane" id="tab4">
                         <div id="box1" style="overflow-y:auto;" class="col-md-6 col-sm-6">
                             <div class="panel panel-danger" style="margin-top: 20px;">
@@ -545,38 +537,42 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane active" id="tab6">
+                    <div class="tab-pane" id="tab6">
 
                         <div class="col-md-12">
                             <div class="panel panel-primary" style="text-align:center;margin-top: 50px;height: 300px;">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">统计结果展示</h3>
                                 </div>
-                                <p style="text-align: center;margin-top: 30px;">
-                                    <button class="btn btn-primary" type="button">
-                                        完成产品数 <span class="badge" id="sumofFinishedP">0</span> 个
-                                    </button>
-                                </p>
-                                <p style="text-align: center;">
-                                    <button class="btn btn-primary" type="button">
-                                        合格产品数 <span class="badge" id="sumofPassedP">0</span> 个
-                                    </button>
-                                </p>
-                                <p style="text-align: center;">
-                                    <button class="btn btn-primary" type="button">
-                                        产品合格率 <span class="badge" id="passRate">0</span>
-                                    </button>
-                                </p>
-                                <p style="text-align: center;">
-                                    <button class="btn btn-primary" type="button">
-                                        拧紧合格率 <span class="badge" id="tightRate">0</span>
-                                    </button>
-                                </p>
-                                <p style="text-align: center;">
-                                    <button class="btn btn-primary" type="button">
-                                        压装合格率 <span class="badge" id="pressRate">0</span>
-                                    </button>
-                                </p>
+                                <div class="col-md-6">
+                                    <p style="text-align: center;margin-top: 30px;">
+                                        <button class="btn btn-primary" type="button">
+                                            完成产品数 <span class="badge" id="sumofFinishedP">0</span> 个
+                                        </button>
+                                    </p>
+                                    <p style="text-align: center;">
+                                        <button class="btn btn-primary" type="button">
+                                            合格产品数 <span class="badge" id="sumofPassedP">0</span> 个
+                                        </button>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p style="text-align: center; margin-top: 30px;">
+                                        <button class="btn btn-primary" type="button">
+                                            产品合格率 <span class="badge" id="passRate">0</span>
+                                        </button>
+                                    </p>
+                                    <p style="text-align: center;">
+                                        <button class="btn btn-primary" type="button">
+                                            拧紧合格率 <span class="badge" id="tightRate">0</span>
+                                        </button>
+                                    </p>
+                                    <p style="text-align: center;">
+                                        <button class="btn btn-primary" type="button">
+                                            压装合格率 <span class="badge" id="pressRate">0</span>
+                                        </button>
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
@@ -620,7 +616,7 @@
                     </div>
 
 
-                    <div class="tab-pane active" id="tab7">
+                    <div class="tab-pane" id="tab7">
                         <div class="col-md-12">
                             <div style="height: 300px;overflow-y:auto;">
                                 <div class="panel panel-warning" style="margin-top: 20px;">
@@ -646,7 +642,7 @@
         </div>
     </div>
 
-    
+
     <script>
         var tempid = -1,
             length = [],
@@ -675,10 +671,10 @@
             productID = [];
         var station_status = Array(11).fill(0);//工位状态监控
         var station_isread = Array(11).fill(2);
-        var sp_status = Array(16).fill(0);//0代表产线未运行，1代表产线正常运行，2代表产线出现错误
-        var sp_isread = Array(16).fill(2);//0未读，1已读，2为初始状态
-        var sc_status = Array(16).fill(0);
-        var sc_isread = Array(16).fill(2);
+        var sp_status = Array(17).fill(0);//0代表产线未运行，1代表产线正常运行，2代表产线出现错误
+        var sp_isread = Array(76).fill(2);//0未读，1已读，2为初始状态
+        var sc_status = Array(17).fill(0);
+        var sc_isread = Array(17).fill(2);
         var PLCstatus = { status: 0, isread: 2 };
 
 
@@ -735,18 +731,18 @@
                     }
                 }
 
-                for (var i = 0; i < 16; i++) {
+                for (var i = 1; i <= 16; i++) {
                     if (json_data["sc" + String(i)] == "0") {
-                        sc_status[i] = 2;
+                        sc_status[i - 1] = 2;
                     }
                     else if (json_data["sc" + String(i)] == "1") {
-                        sc_status[i] = 1;
+                        sc_status[i - 1] = 1;
                     }
                     if (json_data["se" + String(i)] == "0") {
-                        sp_status[i] = 2;
+                        sp_status[i - 1] = 2;
                     }
                     else if (json_data["se" + String(i)] == "1") {
-                        sp_status[i] = 1;
+                        sp_status[i - 1] = 1;
                     }
                 }
             });
@@ -776,42 +772,42 @@
             }
 
             //sc、sp状态监控
-            for (var i = 0; i < 16; i++) {
-                if (sc_status[i] == 2) {
-                    if (sc_isread[i] == 2) {
-                        sc_isread[i] = 0;
+            for (var i = 1; i <= 16; i++) {
+                if (sc_status[i - 1] == 2) {
+                    if (sc_isread[i - 1] == 2) {
+                        sc_isread[i - 1] = 0;
                     }
 
-                    $("#status-2-" + String(i)).attr("style", "background-color:lightcoral;");
-                    if (sc_isread[i] == 0) {
+                    $("#status-2-" + String(i - 1)).attr("style", "background-color:lightcoral;");
+                    if (sc_isread[i - 1] == 0) {
                         $("#statusWatch").attr('class', 'btn btn-danger');
                     }
                 }
-                else if (sc_status[i] == 1) {
-                    $("#status-2-" + String(i)).attr("style", "background-color:lightgreen;");
-                    sc_isread[i] = 2;
+                else if (sc_status[i - 1] == 1) {
+                    $("#status-2-" + String(i - 1)).attr("style", "background-color:lightgreen;");
+                    sc_isread[i - 1] = 2;
                 }
                 else {
-                    $("#status-2-" + String(i)).removeAttr("style");
-                    sc_isread[i] = 2;
+                    $("#status-2-" + String(i - 1)).removeAttr("style");
+                    sc_isread[i - 1] = 2;
                 }
 
-                if (sp_status[i] == 2) {
-                    if (sp_isread[i] == 2) {
-                        sp_isread[i] = 0;
+                if (sp_status[i - 1] == 2) {
+                    if (sp_isread[i - 1] == 2) {
+                        sp_isread[i - 1] = 0;
                     }
-                    $("#status-3-" + String(i)).attr("style", "background-color:lightcoral;");
-                    if (sp_isread[i] == 0) {
+                    $("#status-3-" + String(i - 1)).attr("style", "background-color:lightcoral;");
+                    if (sp_isread[i - 1] == 0) {
                         $("#statusWatch").attr('class', 'btn btn-danger');
                     }
                 }
-                else if (sp_status[i] == 1) {
-                    $("#status-3-" + String(i)).attr("style", "background-color:lightgreen;");
+                else if (sp_status[i - 1] == 1) {
+                    $("#status-3-" + String(i - 1)).attr("style", "background-color:lightgreen;");
                     sp_isread[i] = 2;
                 }
                 else {
-                    $("#status-3-" + String(i)).removeAttr("style");
-                    sp_isread[i] = 2;
+                    $("#status-3-" + String(i - 1)).removeAttr("style");
+                    sp_isread[i - 1] = 2;
                 }
             }
 
@@ -924,11 +920,6 @@
             var KPIstring = "";
 
             $.getJSON(dataUrl, function (json_data) {
-                Chart1.hideLoading();
-                Chart2.hideLoading();
-                Chart3.hideLoading();
-                Chart4.hideLoading();
-                Colchart.hideLoading();
                 id.push(json_data[0]['id']);
                 data040.push(json_data[0]['avg_torque_diversion040']);
                 data070.push(json_data[0]['avg_torque_diversion070']);
@@ -942,6 +933,14 @@
                     dis010.shift();
                     dis020.shift();
                 }
+
+                Chart1.hideLoading();
+                Chart2.hideLoading();
+                Chart3.hideLoading();
+                Chart4.hideLoading();
+                Chart5.hideLoading();
+                Chart6.hideLoading();
+                Colchart.hideLoading();
             });
 
             $.getJSON(timeUrl, function (json_data) {
@@ -952,7 +951,7 @@
 
             $.getJSON(KPIUrl, function (json_data) {
                 KPIstring = "编号" + json_data[0]['pid'] + "    上线时间：" + json_data[0]['oy'] + "-" + json_data[0]['omon'] + "-" + json_data[0]['od'] + "  " + json_data[0]['oh'] + ":" + json_data[0]['omin'] + ":" + json_data[0]['osec'] + "    下线时间：" + json_data[0]['ofy'] + "-" + json_data[0]['ofmon'] + "-" + json_data[0]['ofday'] + "  " + json_data[0]['ofhour'] + ":" + json_data[0]['ofmin'] + ":" + json_data[0]['ofsec'] + "    制作时间：" + json_data[0]['time_consume'] + "秒";
-                $('#KPI').append("<p>" + KPIstring + "</P>");
+                $('#KPI').append("<p>" + KPIstring + "</p>");
                 $('#tightRate').text(toPercent(Number(json_data[2]['screw_percent'])));
                 $('#pressRate').text(toPercent(Number(json_data[1]['press_percent'])));
             });
@@ -992,7 +991,7 @@
                         break;
 
                 }
-                $("#bottlenID").text(Number(json_data['Neck']) + "号 当前产品id为" + Number(json_data['id']));
+                $("#bottlenID").text((temp + "号 当前产品id为" + Number(json_data['id'])));
             });
 
             $.getJSON(numOfProductUrl, function (json_data) {
@@ -1025,46 +1024,69 @@
         var LowTight = 0;
         var AverageTight = 0;
 
+        var lowCount040 = 0;
+        var highCount040 = 0;
+        var lowCount070 = 0;
+        var highCount070 = 0;
+
         function judge() {
-            //监测长度时执行
-            if (length[length.length - 1] > HighestLength) {
-                HigherCountLength++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
+
+            //监测040工位
+            if (data040[data040.length - 1] > HighTight) {
+                highCount040++;
                 var now = new Date();
-                let warningText = now + "产线出现严重危险：length值：" + length[length.length - 1] + " 大于最大阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (length[length.length - 1] < LowestLength) {
-                LowerCountLength++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
+                let warningText = now + "<span class=\"label label-danger\">产线出现严重危险：040工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data040[data040.length - 1] + "</span>  大于最大阈值";
+                $('#warningLog1').append("<p>"+warningText+"</p>");
+            } else if (data040[data040.length - 1] < LowTight) {
+                lowCount040++;
                 var now = new Date();
-                let warningText = now + "产线出现严重危险：length值：" + length[length.length - 1] + " 低于最小阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (length[length.length - 1] >= AverageLength && length[length.length - 1] <= HighestLength) {
-                HigherCountLength++;
-                LowerCountLength = 0;
-            } else if (length[length.length - 1] < AverageLength && length[length.length - 1] >= LowestLength) {
-                HigherCountLength = 0;
-                LowerCountLength++;
+                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">040工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data040[data040.length - 1] + "</span>  低于最小阈值";
+                $('#warningLog1').append("<p>"+warningText+"</p>");
+            } else if (length[length.length - 1] > AverageTight && length[length.length - 1] < HighTight) {
+                highCount040++;
+                lowCount040 = 0;
+            } else if (length[length.length - 1] < AverageTight && length[length.length - 1] > lowCount040) {
+                highCount040 = 0;
+                lowCount040++;
             }
 
-            if (HigherCountLength >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
+            if (highCount040 >= 5) { 
                 var now = new Date();
-                let warningText = now + "产线出现潜在危险：length值连续" + HigherCountLength + "次高于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (LowerCountLength >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">040工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + highCount040 + "</span>  次高于中位阈值";
+                $('#warningLog2').append("<p>"+warningText+"</p>");
+            } else if (lowCount040 >= 5) {
                 var now = new Date();
-                let warningText = now + "产线出现潜在危险：length值连续" + LowerCountLength + "次低于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">040工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + lowCount040 + "</span>  次低于中位阈值";
+                $('#warningLog2').append("<p>"+warningText+"</p>");
+            }
+
+            //监控070工位
+            if (data070[data070.length - 1] > HighTight) {
+                highCount070++;
+                var now = new Date();
+                let warningText = now + "<span class=\"label label-danger\">产线出现严重危险：070工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data070[data070.length - 1] + "</span>  大于最大阈值";
+                $('#warningLog1').append("<p>"+warningText+"</p>");
+            } else if (data070[data070.length - 1] < LowTight) {
+                lowCount070++;
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">070工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data070[data070.length - 1] + "</span>  低于最小阈值";
+                $('#warningLog1').append("<p>"+warningText+"</p>");
+            } else if (length[length.length - 1] > AverageTight && length[length.length - 1] < HighTight) {
+                highCount070++;
+                lowCount070 = 0;
+            } else if (length[length.length - 1] < AverageTight && length[length.length - 1] > lowCount070) {
+                highCount070 = 0;
+                lowCount070++;
+            }
+
+            if (highCount070 >= 5) { 
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">070工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + highCount070 + "</span>  次高于中位阈值";
+                $('#warningLog2').append("<p>"+warningText+"</p>");
+            } else if (lowCount070 >= 5) {
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">070工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + lowCount070 + "</span>  次低于中位阈值";
+                $('#warningLog2').append("<p>"+warningText+"</p>");
             }
 
             //监测宽度时执行
@@ -1112,14 +1134,14 @@
 
         function ChangePress() {
             pressFlag = 1;
-            LowestLength = Number(document.getElementById('Plow').value);
-            HighestLength = Number(document.getElementById('Phigh').value);
+            LowPress = Number(document.getElementById('Plow').value);
+            HighPress = Number(document.getElementById('Phigh').value);
         }
 
         function ChangeTight() {
             tightFlag = 1;
-            LowestLength = Number(document.getElementById('Tlow').value);
-            HighestLength = Number(document.getElementById('Thigh').value);
+            LowTight = Number(document.getElementById('Tlow').value);
+            HighTight = Number(document.getElementById('Thigh').value);
         }
 
         function Reset() {
@@ -1395,6 +1417,9 @@
             }]
         }
 
+        setInterval(function () {
+            Resize();
+        }, 100);
 
         setInterval(function () {
             stateWatch();
@@ -1404,7 +1429,6 @@
             if (tempid == id[id.length - 1])
                 return;
             productBasedData();
-
         }, 1000);
 
         var Chart1 = echarts.init(document.getElementById('chart1'), 'wonderland');
