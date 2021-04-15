@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        生产计划下发
+    </title>
+
+    <script src="resource/js/jquery.js"></script>
+    <link rel="stylesheet" href="resource/css/bootstrap.min.css">
+    <link rel="stylesheet" href="resource/css/bootstrap-theme.min.css">
+    <script src="resource/js/bootstrap.min.js"></script>
+
+    <style>
+        .header {
+            margin-top: 200px;
+            text-align: center;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 30px;
+            color: black
+        }
+
+        .time {
+            margin-top: 60px;
+            text-align: center;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 30px;
+            color: black;
+        }
+
+        .content {
+            margin-top: 70px;
+            text-align: center;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: xx-large;
+            color: black
+        }
+
+        .content a {
+            color: black;
+        }
+
+        .content :hover {
+            color: darkgray
+        }
+
+
+        div.input-group {
+            margin-bottom: 30px;
+        }
+
+        .hamburger {
+            background: transparent;
+            border: none;
+            display: block;
+            height: 32px;
+            margin-left: 15px;
+            position: relative;
+            top: 20px;
+            width: 32px;
+            z-index: 999;
+        }
+
+        .hamburger:hover {
+            outline: none;
+        }
+
+        .hamburger:focus {
+            outline: none;
+        }
+
+        .hamburger:active {
+            outline: none;
+        }
+
+        .hamburger.is-closed:before {
+            -webkit-transform: translate3d(0, 0, 0);
+            -webkit-transition: all 0.35s ease-in-out;
+            color: #ffffff;
+            content: '';
+            display: block;
+            font-size: 14px;
+            line-height: 32px;
+            opacity: 0;
+            text-align: center;
+            width: 100px;
+        }
+
+        .hamburger.is-closed:hover before {
+            -webkit-transform: translate3d(-100px, 0, 0);
+            -webkit-transition: all 0.35s ease-in-out;
+            display: block;
+            opacity: 1;
+        }
+
+        .hamburger.is-closed:hover .hamb-top {
+            -webkit-transition: all 0.35s ease-in-out;
+            top: 0;
+        }
+
+        .hamburger.is-closed:hover .hamb-bottom {
+            -webkit-transition: all 0.35s ease-in-out;
+            bottom: 0;
+        }
+
+        .hamburger.is-closed .hamb-top {
+            -webkit-transition: all 0.35s ease-in-out;
+            background-color: rgba(0, 0, 0, 0.7);
+            top: 5px;
+        }
+
+        .hamburger.is-closed .hamb-middle {
+            background-color: rgba(0, 0, 0, 0.7);
+            margin-top: -2px;
+            top: 50%;
+        }
+
+        .hamburger.is-closed .hamb-bottom {
+            -webkit-transition: all 0.35s ease-in-out;
+            background-color: rgba(0, 0, 0, 0.7);
+            bottom: 5px;
+        }
+
+        .hamburger.is-closed .hamb-top,
+        .hamburger.is-closed .hamb-middle,
+        .hamburger.is-closed .hamb-bottom,
+        .hamburger.is-open .hamb-top,
+        .hamburger.is-open .hamb-middle,
+        .hamburger.is-open .hamb-bottom {
+            height: 4px;
+            left: 0;
+            position: absolute;
+            width: 100%;
+        }
+
+        .hamburger.is-open .hamb-top {
+            -webkit-transform: rotate(45deg);
+            -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.73, 1, 0.28, 0.08);
+            background-color: #000000;
+            margin-top: -2px;
+            top: 50%;
+        }
+
+        .hamburger.is-open .hamb-middle {
+            background-color: #000000;
+            display: none;
+        }
+
+        .hamburger.is-open .hamb-bottom {
+            -webkit-transform: rotate(-45deg);
+            -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.73, 1, 0.28, 0.08);
+            background-color: #000000;
+            margin-top: -2px;
+            top: 50%;
+        }
+
+        .hamburger.is-open:before {
+            -webkit-transform: translate3d(0, 0, 0);
+            -webkit-transition: all 0.35s ease-in-out;
+            color: #000000;
+            content: '';
+            display: block;
+            font-size: 14px;
+            line-height: 32px;
+            opacity: 0;
+            text-align: center;
+            width: 100px;
+        }
+
+        .hamburger.is-open:hover before {
+            -webkit-transform: translate3d(-100px, 0, 0);
+            -webkit-transition: all 0.35s ease-in-out;
+            display: block;
+            opacity: 1;
+        }
+
+        #wrapper {
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            -webkit-transition: all 0.5s ease;
+            padding-left: 0;
+            transition: all 0.5s ease;
+        }
+
+        #wrapper.toggled {
+            padding-left: 220px;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+            width: 220px;
+        }
+
+        #wrapper.toggled #page-content-wrapper {
+            margin-right: -220px;
+            position: absolute;
+        }
+
+        #sidebar-wrapper {
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            -webkit-transition: all 0.5s ease;
+            background: #1a1a1a;
+            height: 100%;
+            left: 220px;
+            margin-left: -220px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            transition: all 0.5s ease;
+            width: 0;
+            z-index: 1000;
+        }
+
+        #sidebar-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        #page-content-wrapper {
+            padding-top: 10px;
+            width: 100%;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            width: 220px;
+        }
+
+        .sidebar-nav li {
+            display: inline-block;
+            line-height: 20px;
+            position: relative;
+            width: 100%;
+        }
+
+        .sidebar-nav li:before {
+            background-color: #1c1c1c;
+            content: '';
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            -webkit-transition: width 0.2s ease-in;
+            transition: width 0.2s ease-in;
+            width: 3px;
+            z-index: -1;
+        }
+
+        .sidebar-nav li:first-child a {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .sidebar-nav li:nth-child(2):before {
+            background-color: #627dd7;
+        }
+
+        .sidebar-nav li:nth-child(3):before {
+            background-color: #627dd7;
+        }
+
+        .sidebar-nav li:nth-child(4):before {
+            background-color: #627dd7;
+        }
+
+        .sidebar-nav li:nth-child(5):before {
+            background-color: #627dd7;
+        }
+
+        .sidebar-nav li:nth-child(6):before {
+            background-color: #627dd7;
+        }
+
+        .sidebar-nav li:hover:before {
+            -webkit-transition: width 0.2s ease-in;
+            transition: width 0.2s ease-in;
+            width: 100%;
+        }
+
+        .sidebar-nav li a {
+            color: #dddddd;
+            display: block;
+            padding: 10px 15px 10px 30px;
+            text-decoration: none;
+        }
+
+        .sidebar-nav li.open:hover before {
+            -webkit-transition: width 0.2s ease-in;
+            transition: width 0.2s ease-in;
+            width: 100%;
+        }
+
+        .sidebar-nav .dropdown-menu {
+            background-color: #222222;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            width: 100%;
+        }
+
+        .sidebar-nav li a:hover,
+        .sidebar-nav li a:active,
+        .sidebar-nav li a:focus,
+        .sidebar-nav li.open a:hover,
+        .sidebar-nav li.open a:active,
+        .sidebar-nav li.open a:focus {
+            background-color: transparent;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .sidebar-nav>.sidebar-brand {
+            font-size: 20px;
+            height: 65px;
+            line-height: 44px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            var trigger = $('.hamburger'),
+                overlay = $('.overlay'),
+                isClosed = false;
+            trigger.click(function () {
+                hamburger_cross();
+            });
+            function hamburger_cross() {
+                if (isClosed == true) {
+                    overlay.hide();
+                    trigger.removeClass('is-open');
+                    trigger.addClass('is-closed');
+                    isClosed = false;
+                } else {
+                    overlay.show();
+                    trigger.removeClass('is-closed');
+                    trigger.addClass('is-open');
+                    isClosed = true;
+                }
+            }
+            $('[data-toggle="offcanvas"]').click(function () {
+                $('#wrapper').toggleClass('toggled');
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div class="overlay"></div>
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="sidebar-wrapper">
+            <ul class="nav sidebar-nav">
+                <li class="sidebar-brand"> <a href="#">SPC</a> </li>
+                <li> <a href="index.html">Home</a> </li>
+                <li> <a href="line1.html">生产线1</a> </li>
+                <li> <a href="line2.html">生产线2</a> </li>
+                <li> <a href="line3.html">生产线3</a> </li>
+                <li> <a href="ProcessPublish.html">生产计划下发</a> </li>
+            </ul>
+        </nav>
+        <div id="page-content-wrapper">
+            <button type="button" class="hamburger is-closed animated fadeInLeft" data-toggle="offcanvas">
+                <span class="hamb-top"></span>
+                <span class="hamb-middle"></span>
+                <span class="hamb-bottom"></span>
+            </button>
+            <div class="container">
+                <div class="Title">
+                    <h1>生产计划下发</h1>
+                </div>
+
+                <div class="sheet">
+                    <label for="basic-url">请输入数据：</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">Line1set1</span>
+                        <input type="text" class="form-control" id="line1set1" aria-describedby="basic-addon3">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">Lines1et2</span>
+                        <input type="text" class="form-control" id="line1set2" aria-describedby="basic-addon3">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">Line1set3</span>
+                        <input type="text" class="form-control" id="line1set3" aria-describedby="basic-addon3">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">Line2</span>
+                        <input type="text" class="form-control" id="line2" aria-describedby="basic-addon3">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">Line3</span>
+                        <input type="text" class="form-control" id="line3" aria-describedby="basic-addon3">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">Start</span>
+                        <input type="text" class="form-control" id="start" aria-describedby="basic-addon3">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">End</span>
+                        <input type="text" class="form-control" id="end" aria-describedby="basic-addon3">
+                    </div>
+                    <button type="button" onclick="generatenURL()" style="margin-left: 100px;">提交</button> <button
+                        type="button" onclick="Reset()" style="margin-left: 100px;">重置</button>
+                </div>
+
+                <div id="testArea">
+                    <p id="test"></p>
+                </div>
+
+                <div class="time">
+                    <div id="show_time">
+                        <script>
+                            function generatenURL() {
+                                let input1 = $('#line1set1').val();
+                                let input2 = $('#line1set2').val();
+                                let input3 = $('#line1set3').val();
+                                let input4 = $('#line2').val();
+                                let input5 = $('#line3').val();
+                                let input6 = $('#start').val();
+                                let input7 = $('#end').val();
+                                let url = "http://localhost:8080/get?line1set1=" + input1 + "&line1set2=" + input2 + "&line1set3=" + input3 + "&line2=" + input4 + "&line3=" + input5 + "&startdate=" + input6 + "&enddate=" + input7;
+                                $('#test').text(url + "已提交");
+                                $.ajax(url, {
+                                    method: 'GET'
+                                });
+                            }
+
+                            function Reset() {
+                                var now = new Date();
+
+                                if (Number(now.getMonth() + 1) < 10) {
+                                    var nowtime = now.getFullYear() + "0" + (now.getMonth() + 1);
+                                }
+                                else {
+                                    var nowtime = now.getFullYear() + (now.getMonth() + 1);
+                                }
+
+                                if (Number(now.getDate() < 10)) {
+                                    nowtime += "0" + now.getDate();
+                                }
+                                else {
+                                    nowtime += +now.getDate();
+                                }
+
+                                $('#line1set1').val("");
+                                $('#line1set2').val("");
+                                $('#line1set3').val("");
+                                $('#line2').val("");
+                                $('#line3').val("");
+                                $('#start').val(nowtime);
+                                $('#end').val(nowtime);
+                            }
+
+                            $(Reset);
+
+                            setInterval("fun(show_time)", 1);
+                            function fun(timeID) {
+                                var date = new Date();
+                                var y = date.getFullYear();
+                                var m = date.getMonth() + 1;
+                                var d = date.getDate();
+                                var w = date.getDay();
+                                var h = date.getHours();
+                                var minute = date.getMinutes()
+                                var s = date.getSeconds();
+                                if (m < 10) {
+                                    m = "0" + m;
+                                }
+                                if (d < 10) {
+                                    d = "0" + d;
+                                }
+                                if (h < 10) {
+                                    h = "0" + h;
+                                }
+                                if (minute < 10) {
+                                    minute = "0" + minute;
+                                }
+                                if (s < 10) {
+                                    s = "0" + s;
+                                }
+                                document.getElementById(timeID.id).innerHTML = y + "-" + m + "-" + d + "      " + h + ":" + minute + ":" + s
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
