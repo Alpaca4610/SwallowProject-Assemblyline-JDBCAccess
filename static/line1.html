@@ -1,4 +1,3 @@
-<!-- todo:警报页面按钮 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 
@@ -62,9 +61,6 @@
     </style>
 
     <script>
-        var pressFlag = 0;
-        var tightFlag = 0;
-
         $(function () {
             Chart1.showLoading();
             Chart2.showLoading();
@@ -72,6 +68,10 @@
             Chart4.showLoading();
             Chart5.showLoading();
             Chart6.showLoading();
+            timeChart.showLoading();
+            PressPiechart.showLoading();
+            TorquePiechart.showLoading();
+            DisplacePiechart.showLoading();
             Colchart.showLoading();
             var cboxflag = [0, 0, 0, 0];
             var checkbox1 = $('#cboxA');
@@ -218,6 +218,9 @@
             Chart6.resize();
             Colchart.resize();
             timeChart.resize();
+            PressPiechart.resize();
+            TorquePiechart.resize();
+            DisplacePiechart.resize();
         }
 
         $(window).resize(function () {
@@ -248,7 +251,7 @@
                     </li>
                     <li id="tab_btn_3"><a href="#tab3" data-toggle="tab" onclick="ResizeLoading()">瓶颈工位监控</a>
                     </li>
-                    <li id="tab_btn_4"><a href="#tab4" data-toggle="tab" onclick="ResizeLoading()">报警页面</a>
+                    <li id="tab_btn_4"><a href="#tab4" data-toggle="tab" onclick="warningBtn()">报警页面</a>
                     </li>
                     <li id="tab_btn_5"><a href="#tab5" data-toggle="tab" onclick="statusBtn()">状态监控</a>
                     </li>
@@ -341,22 +344,21 @@
                         </div>
                     </div>
 
-                    <!-- todo：自动滚动 -->
                     <div class="tab-pane" id="tab4">
-                        <div id="box1" style="overflow-y:auto;" class="col-md-6 col-sm-6">
+                        <div id="box1" class="col-md-6 col-sm-6">
                             <div class="panel panel-danger" style="margin-top: 20px;">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">严重危险警报</h3>
                                 </div>
-                                <div class="panel-body" id="warningLog1"></div>
+                                <div class="panel-body" style="overflow-y:auto;height: 550px;" id="warningLog1"></div>
                             </div>
                         </div>
-                        <div id="box2" style="overflow-y:auto;" class="col-md-6 col-sm-6">
+                        <div id="box2" class="col-md-6 col-sm-6">
                             <div class="panel panel-warning" style="margin-top: 20px;">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">潜在危险警报</h3>
                                 </div>
-                                <div class="panel-body" id="warningLog2"></div>
+                                <div class="panel-body" id="warningLog2" style="overflow-y:auto;height: 550px;"></div>
                             </div>
                         </div>
                     </div>
@@ -603,9 +605,9 @@
                         <div class="col-md-6">
                             <div class="panel panel-primary" style="text-align:center;height: 300px;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">产品-耗时统计结果图</h3>
+                                    <h3 class="panel-title">压力分布统计结果图</h3>
                                 </div>
-                                <div id="timeChart" style="height: 300px;"></div>
+                                <div id="PressPieChart" style="height: 300px;"></div>
                             </div>
                         </div>
 
@@ -613,9 +615,9 @@
                         <div class="col-md-6">
                             <div class="panel panel-primary" style="text-align:center;height: 300px;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">产品-耗时统计结果图</h3>
+                                    <h3 class="panel-title">位移分布统计结果图</h3>
                                 </div>
-                                <div id="timeChart" style="height: 300px;"></div>
+                                <div id="DisplacePieChart" style="height: 300px;"></div>
                             </div>
                         </div>
 
@@ -623,9 +625,9 @@
                         <div class="col-md-6">
                             <div class="panel panel-primary" style="text-align:center;height: 300px;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">产品-耗时统计结果图</h3>
+                                    <h3 class="panel-title">扭矩分布统计结果图</h3>
                                 </div>
-                                <div id="timeChart" style="height: 300px;"></div>
+                                <div id="TorquePieChart" style="height: 300px;"></div>
                             </div>
                         </div>
                     </div>
@@ -633,41 +635,40 @@
 
                     <div class="tab-pane" id="tab7">
                         <div class="col-md-12">
-                            <div style="height: 300px;overflow-y:auto;">
-                                <div class="panel panel-warning" style="margin-top: 20px;">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">产品监控</h3>
-                                    </div>
-                                    <div class="panel-body" id="productWatch"></div>
+                            <div class="panel panel-warning" style="margin-top: 20px;margin-bottom: 20px">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">产品监控</h3>
                                 </div>
+                                <div class="panel-body" style="overflow:auto;height: 300px;position:relative"
+                                    id="productWatch"></div>
                             </div>
                         </div>
-                        <div style="height: 300px;overflow-y:auto;" class="col-md-12 col-sm-12">
-                            <div class="panel panel-primary" style="margin-top: 20px;">
+
+                        <div class="col-md-12 col-sm-12">
+                            <div class="panel panel-primary" style="margin-top: 20px;margin-bottom: 20px">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">产品KPI</h3>
                                 </div>
-                                <div class="panel-body" id="KPI"></div>
+                                <div class="panel-body" style="overflow:auto;height: 300px;position:relative" id="KPI">
+                                </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
+
             </div>
         </div>
     </div>
-
+    </div>
 
     <script>
         var tempid = -1,
-            length = [],
-            width = [],
-            height = [],
-            weight = [],
             data040 = [],
             data070 = [],
             dis010 = [],
             dis020 = [],
+            press010 = [],
+            press020 = [],
             bottleneck = 0,
             stationData = Array(7).fill(0),
             pieData = [
@@ -682,6 +683,34 @@
                 { value: 0, name: '80～90s' },
                 { value: 0, name: '90s以上' }
             ],
+            PressPieData = [
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' }
+            ],
+            DisplacePieData = [
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' }
+            ],
+            TorquePieData = [
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' },
+                { value: 0, name: '' }
+            ],
+
             id = [];
         var station_status = Array(11).fill(0);//工位状态监控
         var station_isread = Array(11).fill(2);
@@ -706,6 +735,10 @@
         var highCount040 = 0;
         var lowCount070 = 0;
         var highCount070 = 0;
+        var lowCount010 = 0;
+        var highCount010 = 0;
+        var lowCount020 = 0;
+        var highCount020 = 0;
 
         //产线状态监控按钮onclick函数
         function statusBtn() {
@@ -887,6 +920,7 @@
             var productString = "";
             var productUrl = "http://localhost:8080/PASS_OK_NG";
             var all_status;
+            var productID;
             $.getJSON(productUrl, function (json_data) {
                 all_status = json_data['allok'];
                 productID = Number(json_data['id']);
@@ -962,6 +996,7 @@
             var timeUrl = "http://localhost:8080/recent50";
             var numOfProductUrl = "http://localhost:8080/qualified"
             var dataUrl = "http://localhost:8080/diversion";
+            var recent50Url = "http://localhost:8080/PDTA";
             var KPIstring = "";
 
             $.getJSON(dataUrl, function (json_data) {
@@ -970,14 +1005,18 @@
                 data070.push(json_data[0]['avg_torque_diversion070']);
                 dis010.push(json_data[1]['avg_010_dis']);
                 dis020.push(json_data[1]['avg_020_dis']);
+                press010.push(json_data[1]['avg_010_press']);
+                press020.push(json_data[1]['avg_020_press']);
 
-                // if (id.length > 7) {
-                //     id.shift();
-                //     data040.shift();
-                //     data070.shift();
-                //     dis010.shift();
-                //     dis020.shift();
-                // }
+                if (id.length > 10) {
+                    id.shift();
+                    data040.shift();
+                    data070.shift();
+                    dis010.shift();
+                    dis020.shift();
+                    press010.shift();
+                    press020.shift();
+                }
 
                 Chart1.hideLoading();
                 Chart2.hideLoading();
@@ -985,12 +1024,37 @@
                 Chart4.hideLoading();
                 Chart5.hideLoading();
                 Chart6.hideLoading();
+                timeChart.hideLoading();
+                PressPiechart.hideLoading();
+                TorquePiechart.hideLoading();
+                DisplacePiechart.hideLoading();
                 Colchart.hideLoading();
             });
 
             $.getJSON(timeUrl, function (json_data) {
                 for (var i = 0; i < 10; i++) {
                     pieData[i].value = Number(json_data[i]);
+                }
+            });
+
+            $.getJSON(recent50Url, function (json_data) {
+                var temp = 0;
+                for (var i = 1; i < 101; i += 16) {
+                    PressPieData[temp].name = Number(json_data[i + 1]).toFixed(3) + "s~" + Number(json_data[i]).toFixed(3) + "s";
+                    PressPieData[temp].value = json_data[i + 2];
+                    temp += 1;
+                }
+                temp = 0;
+                for (var i = 5; i < 105; i += 16) {
+                    DisplacePieData[temp].name = Number(json_data[i + 1]).toFixed(3) + "s~" + Number(json_data[i]).toFixed(3) + "s";
+                    DisplacePieData[temp].value = json_data[i + 2];
+                    temp += 1;
+                }
+                temp = 0;
+                for (var i = 9; i < 109; i += 16) {
+                    TorquePieData[temp].name = Number(json_data[i + 1]).toFixed(3) + "~" + Number(json_data[i]).toFixed(3) + "s";
+                    TorquePieData[temp].value = json_data[i + 2];
+                    temp += 1;
                 }
             });
 
@@ -1046,6 +1110,9 @@
             Chart6.setOption(Chart6option);
             Colchart.setOption(ColChartoption);
             timeChart.setOption(timeChartoption);
+            PressPiechart.setOption(PressPieOption);
+            TorquePiechart.setOption(TorquePieOption);
+            DisplacePiechart.setOption(DisplacePieOption);
         }
 
         function productBasedData() {
@@ -1061,102 +1128,135 @@
             if (data040[data040.length - 1] > HighTight) {
                 highCount040++;
                 var now = new Date();
-                let warningText = now + "<span class=\"label label-danger\">产线出现严重危险：040工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data040[data040.length - 1] + "</span>  大于最大阈值";
+                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">040工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data040[data040.length - 1] + "</span>  大于最大阈值：" + HighTight;
                 $('#warningLog1').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
             } else if (data040[data040.length - 1] < LowTight) {
                 lowCount040++;
                 var now = new Date();
-                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">040工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data040[data040.length - 1] + "</span>  低于最小阈值";
+                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">040工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data040[data040.length - 1] + "</span>  低于最小阈值：" + LowTight;
                 $('#warningLog1').append("<p>" + warningText + "</p>");
-            } else if (length[length.length - 1] > AverageTight && length[length.length - 1] < HighTight) {
+                $("#warningWatch").attr('class', 'btn btn-danger');
+            } else if (data040[data040.length - 1] > AverageTight && data040[data040.length - 1] < HighTight) {
                 highCount040++;
                 lowCount040 = 0;
-            } else if (length[length.length - 1] < AverageTight && length[length.length - 1] > lowCount040) {
+            } else if (data040[data040.length - 1] < AverageTight && data040[data040.length - 1] > LowTight) {
                 highCount040 = 0;
                 lowCount040++;
             }
 
             if (highCount040 >= 5) {
                 var now = new Date();
-                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">040工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + highCount040 + "</span>  次高于中位阈值";
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">040工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + highCount040 + "</span>  次高于中位阈值：" + AveragePress;
                 $('#warningLog2').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
             } else if (lowCount040 >= 5) {
                 var now = new Date();
-                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">040工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + lowCount040 + "</span>  次低于中位阈值";
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">040工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + lowCount040 + "</span>  次低于中位阈值：" + AveragePress;
                 $('#warningLog2').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
             }
 
             //监控070工位
             if (data070[data070.length - 1] > HighTight) {
                 highCount070++;
                 var now = new Date();
-                let warningText = now + "<span class=\"label label-danger\">产线出现严重危险：070工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data070[data070.length - 1] + "</span>  大于最大阈值";
+                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">070工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data070[data070.length - 1] + "</span>  大于最大阈值：" + HighTight;
                 $('#warningLog1').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
             } else if (data070[data070.length - 1] < LowTight) {
                 lowCount070++;
                 var now = new Date();
-                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">070工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data070[data070.length - 1] + "</span>  低于最小阈值";
+                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">070工位扭矩偏移量:</span>  <span class=\"label label-warning\">" + data070[data070.length - 1] + "</span>  低于最小阈值：" + LowTight;
                 $('#warningLog1').append("<p>" + warningText + "</p>");
-            } else if (length[length.length - 1] > AverageTight && length[length.length - 1] < HighTight) {
+                $("#warningWatch").attr('class', 'btn btn-danger');
+            } else if (data070[data070.length - 1] > AverageTight && data070[data070.length - 1] < HighTight) {
                 highCount070++;
                 lowCount070 = 0;
-            } else if (length[length.length - 1] < AverageTight && length[length.length - 1] > lowCount070) {
+            } else if (data070[data070.length - 1] < AverageTight && data070[data070.length - 1] > LowTight) {
                 highCount070 = 0;
                 lowCount070++;
             }
 
             if (highCount070 >= 5) {
                 var now = new Date();
-                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">070工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + highCount070 + "</span>  次高于中位阈值";
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">070工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + highCount070 + "</span>  次高于中位阈值：" + AveragePress;
                 $('#warningLog2').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
             } else if (lowCount070 >= 5) {
                 var now = new Date();
-                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">070工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + lowCount070 + "</span>  次低于中位阈值";
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">070工位扭矩偏移量</span>连续  <span class=\"label label-warning\">" + lowCount070 + "</span>  次低于中位阈值：" + AveragePress;
                 $('#warningLog2').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
             }
 
-            //监测宽度时执行
-
-            if (width[width.length - 1] > HighestWidth) {
-                HigherCountWidth++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
+            //010
+            if (press010[press010.length - 1] > HighPress) {
+                highCount010++;
                 var now = new Date();
-                let warningText = now + "产线出现严重危险：width值：" + width[width.length - 1] + " 大于最大阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (width[width.length - 1] < LowestWidth) {
-                LowerCountWidth++;
-                let position = document.getElementById('warningLog1');
-                let temp = document.createElement('p');
+                let warningText = now + "<span class=\"label label-danger\">产线出现严重危险：010工位压力偏移量:</span>  <span class=\"label label-warning\">" + press010[press010.length - 1] + "</span>  大于最大阈值：" + HighPress;
+                $('#warningLog1').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
+            } else if (press010[press010.length - 1] < LowPress) {
+                lowCount010++;
                 var now = new Date();
-                let warningText = now + "产线出现严重危险：width值：" + width[width.length - 1] + " 低于最小阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (width[width.length - 1] >= AverageWidth && width[width.length - 1] <= HighestWidth) {
-                HigherCountWidth++;
-                LowerCountWidth = 0;
-            } else if (width[width.length - 1] < AverageWidth && width[width.length - 1] >= LowestWidth) {
-                HigherCountWidth = 0;
-                LowerCountWidth++;
+                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">010工位压力偏移量:</span>  <span class=\"label label-warning\">" + press010[press010.length - 1] + "</span>  低于最小阈值：" + LowPress;
+                $('#warningLog1').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
+            } else if (press010[press010.length - 1] > AveragePress && press010[press010.press010 - 1] < HighPress) {
+                highCount010++;
+                lowCount010 = 0;
+            } else if (press010[press010.length - 1] < AveragePress && press010[press010.length - 1] > LowPress) {
+                highCount010 = 0;
+                lowCount010++;
             }
 
-            if (HigherCountWidth >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
+            if (highCount010 >= 5) {
                 var now = new Date();
-                let warningText = now + "产线出现潜在危险：width值连续" + HigherCountWidth + "次高于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
-            } else if (LowerCountWidth >= 5) {
-                let position = document.getElementById('warningLog2');
-                let temp = document.createElement('p');
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">010工位压力偏移量</span>连续  <span class=\"label label-warning\">" + highCount010 + "</span>  次高于中位阈值：" + AveragePress;
+                $('#warningLog2').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
+            } else if (lowCount010 >= 5) {
                 var now = new Date();
-                let warningText = now + "产线出现潜在危险：width值连续" + LowerCountWidth + "次低于中位阈值";
-                temp.innerText = warningText;
-                position.appendChild(temp);
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">010工位压力偏移量</span>连续  <span class=\"label label-warning\">" + lowCount010 + "</span>  次低于中位阈值：" + AveragePress;
+                $('#warningLog2').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
+            }
+
+            //020
+            if (press020[press020.length - 1] > HighPress) {
+                highCount020++;
+                var now = new Date();
+                let warningText = now + "<span class=\"label label-danger\">产线出现严重危险：020工位压力偏移量:</span>  <span class=\"label label-warning\">" + press020[press020.length - 1] + "</span>  大于最大阈值：" + HighPress;
+                $('#warningLog1').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
+            } else if (press020[press020.length - 1] < LowPress) {
+                lowCount020++;
+                var now = new Date();
+                let warningText = now + "产线出现严重危险：<span class=\"label label-danger\">020工位压力偏移量:</span>  <span class=\"label label-warning\">" + press020[press020.length - 1] + "</span>  低于最小阈值：" + LowPress;
+                $('#warningLog1').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
+            } else if (press020[press020.length - 1] > AveragePress && press020[press020.press020 - 1] < HighPress) {
+                highCount020++;
+                lowCount020 = 0;
+            } else if (press020[press020.length - 1] < AveragePress && press020[press020.length - 1] > LowPress) {
+                highCount020 = 0;
+                lowCount020++;
+            }
+
+            if (highCount020 >= 5) {
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">020工位压力偏移量</span>连续  <span class=\"label label-warning\">" + highCount020 + "</span>  次高于中位阈值：" + AveragePress;
+                $('#warningLog2').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
+            } else if (lowCount020 >= 5) {
+                var now = new Date();
+                let warningText = now + "产线出现潜在危险：<span class=\"label label-danger\">020工位压力偏移量</span>连续  <span class=\"label label-warning\">" + lowCount020 + "</span>  次低于中位阈值：" + AveragePress;
+                $('#warningLog2').append("<p>" + warningText + "</p>");
+                $("#warningWatch").attr('class', 'btn btn-danger');
             }
         }
+
 
         //图表标线设置函数
         function freshLine() {
@@ -1270,7 +1370,58 @@
         var timeChartoption = {
             title: {
                 text: '产品-耗时统计结果图',
-                subtext: '测试版',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            label: {
+                alignTo: 'edge',
+                formatter: '{name|{b}} ｜ {value|{c}个}',
+                minMargin: 5,
+                edgeDistance: 10,
+                lineHeight: 15,
+                rich: {
+                    value: {
+                        fontSize: 15,
+                        color: '#999'
+                    }
+                }
+            },
+            labelLine: {
+                length: 15,
+                length2: 0,
+                maxSurfaceAngle: 80
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '耗时',
+                    type: 'pie',
+                    radius: '50%',
+                    data: pieData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var PressPieOption = {
+            title: {
+                text: '压力统计结果图',
                 left: 'center'
             },
             tooltip: {
@@ -1308,7 +1459,111 @@
                     name: '耗时',
                     type: 'pie',
                     radius: '50%',
-                    data: pieData,
+                    data: PressPieData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var DisplacePieOption = {
+            title: {
+                text: '位移统计结果图',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            label: {
+                alignTo: 'edge',
+                formatter: '{name|{b}}\n{value|{c}个}',
+                minMargin: 5,
+                edgeDistance: 10,
+                lineHeight: 15,
+                rich: {
+                    value: {
+                        fontSize: 15,
+                        color: '#999'
+                    }
+                }
+            },
+            labelLine: {
+                length: 15,
+                length2: 0,
+                maxSurfaceAngle: 80
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '耗时',
+                    type: 'pie',
+                    radius: '50%',
+                    data: DisplacePieData,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var TorquePieOption = {
+            title: {
+                text: '扭矩统计结果图',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            label: {
+                alignTo: 'edge',
+                formatter: '{name|{b}}\n{value|{c}个}',
+                minMargin: 5,
+                edgeDistance: 10,
+                lineHeight: 15,
+                rich: {
+                    value: {
+                        fontSize: 15,
+                        color: '#999'
+                    }
+                }
+            },
+            labelLine: {
+                length: 15,
+                length2: 0,
+                maxSurfaceAngle: 80
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '耗时',
+                    type: 'pie',
+                    radius: '50%',
+                    data: TorquePieData,
                     emphasis: {
                         itemStyle: {
                             shadowBlur: 10,
@@ -1348,7 +1603,6 @@
             }]
         };
 
-        // todo：加上单位，阈值显示
         var Chart1option = {
             title: {
                 text: '040工位扭矩偏移量'
@@ -1479,7 +1733,7 @@
             series: [{
                 name: '偏移量',
                 type: 'line',
-                data: width,
+                data: press010,
                 stack: '值'
             }]
         }
@@ -1571,7 +1825,7 @@
             series: [{
                 name: '偏移量',
                 type: 'line',
-                data: weight,
+                data: press020,
                 stack: '值'
             }]
         }
@@ -1659,6 +1913,15 @@
 
         var timeChart = echarts.init(document.getElementById('timeChart'), 'shine');
         timeChart.setOption(timeChartoption);
+
+        var PressPiechart = echarts.init(document.getElementById('PressPieChart'), 'shine');
+        PressPiechart.setOption(PressPieChart);
+
+        var TorquePiechart = echarts.init(document.getElementById('TorquePieChart'), 'shine');
+        TorquePiechart.setOption(TorquePieChart);
+
+        var DisplacePiechart = echarts.init(document.getElementById('DisplacePieChart'), 'shine');
+        DisplacePiechart.setOption(DisplacePieChart);
 
     </script>
 </body>
